@@ -25,8 +25,8 @@ var numClients = 4; 	// Number of simulated clients
 var minTimeout = 1000;	// Minimum amount of time between customer actions
 var maxTimeout = 10000; // Maximum amount of time between customer actions
 
-var purchasingWeight = 0;		// Purchasing demonstrates SELECTS and INSERTS
-var customerServiceWeight = 0;  // Customer service demonstrates UPDATES and DELETES
+var purchasingWeight = 4;		// Purchasing demonstrates SELECTS and INSERTS
+var customerServiceWeight = 2;  // Customer service demonstrates UPDATES and DELETES
 var jsonWeight = 1;				// Weight on client testing JSON capabilities
 
 var maxRunTime = 0; // Time before this application quits (minutes). Set to 0 to run indefinitely
