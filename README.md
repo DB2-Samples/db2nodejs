@@ -20,7 +20,7 @@ db2-node-demo is a simple implementation of an app running on Node.js runtime de
 
 ## Setting up the database
 
-1. `webstore.ddl` contains SQL to set up the tables used in this example. You can either:
+1. `webstore.ddl` contains SQL to set up the tables required to simulate the mock webstore. You can either:
   
     a. Create a database called `WEBSTORE`, or
   
@@ -31,14 +31,14 @@ db2-node-demo is a simple implementation of an app running on Node.js runtime de
 3. Replace the corresponding credentials for your DB2 sample database in your `populate.js` file
 
 ```
-        db: "SAMPLE",
-        hostname: "LOCALHOST",
+        db: "WEBSTORE",
+        hostname: "127.0.0.1",
         port: 50000,
         username: "DB2INST1",
         password: ""
 ```
 
-4. Run ```node populate.js``` to populate the database with some customer information and inventory
+4. Run ```node populate.js``` to populate the database with some randomly generated customer information and inventory.
 
 ## Setting up the app
 1. Replace the corresponding credentials for your DB2 sample database in your `index.js` file
