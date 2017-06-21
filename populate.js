@@ -1,3 +1,9 @@
+// This small app will populate the mock webstore database with
+// randomly generated customers and inventory.
+//
+// PREREQUISITE: 
+// 	- Run the SQL in webstore.ddl to create the tables this app will populate
+
 var ibmdb = require('ibm_db');		//For connecting to DB
 var Pool = require("ibm_db").Pool 	// For connection pooling
 var async = require('async');       // For executing loops asynchronously
