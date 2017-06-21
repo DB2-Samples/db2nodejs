@@ -1,3 +1,13 @@
+// This is the mock webstore app. It simulates simultaneous users logging in,
+// And taking on one of three behaviours:
+// 	- Purchasing (Selects/Inserts)
+//	- Customer Service (Updates/Deletes)
+//	- JSON testing (Selecting/Inserting JSON fields)
+//
+// PREREQUISITES
+// 	- The SQL in webstore.ddl has been run to create the tables used by this app
+//	- The populate.js app has been run to populate the webstore randomly generated customers and inventory
+
 var ibmdb = require('ibm_db');		//For connecting to DB
 var Pool = require("ibm_db").Pool 	// For connection pooling
 var async = require('async');       // For executing loops asynchronously
