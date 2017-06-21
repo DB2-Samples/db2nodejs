@@ -1,4 +1,5 @@
 --THIS FILE CONTAINS SQL WHICH CREATES TABLES AS USED BY THE MOCK WEBSTORE
+-- See the README section "Setting up the Database" for more info on how to run this SQL
 
 -- This CLP file was created using DB2LOOK Version "11.1" 
 -- Timestamp: Wed Jun 14 18:19:14 2017
