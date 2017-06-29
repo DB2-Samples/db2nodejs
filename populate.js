@@ -10,8 +10,8 @@ var async = require('async');       // For executing loops asynchronously
 // Enter your database credentials here //
 //////////////////////////////////////////
 db_cred = {
-    db: "WEBSTORE",
-    hostname: "9.108.124.101",
+    db: "SAMPLE",
+    hostname: "127.0.0.1",
     port: 50000,
     username: "db2inst1",
     password: "password"
@@ -50,8 +50,8 @@ async.whilst( () => { return i < 100 }, (next) =>{
 	      return;
 	    }
 	    //Get user info:
-	    var sql = "INSERT INTO \"WEBSTORE\".\"CUSTOMER\" (\"C_FIRST_NAME\",\"C_LAST_NAME\",\"C_SALUTATION\") VALUES(?,?,?)"
-	    conn.querySync(sql, [first_names[getRandomInt(0,fnc-1)],last_names[getRandomInt(0,lnc-1)],salutations[getRandomInt(0,sc-1)]]);
+	    var sql = "INSERT INTO \"WEBSTORE\".\"CUSTOMER\" (\"C_FIRST_NAME\",\"C_LAST_NAME\",\"C_SALUTATION\") VALUES('" + first_names[getRandomInt(0,fnc-1)] + "' ,'" + last_names[getRandomInt(0,lnc-1)] + "' ,'" + salutations[getRandomInt(0,sc-1)] + "')"
+	    conn.querySync(sql);
 	    conn.close();
 	    i++;
 	    console.log("CREATED " + i + " CUSTOMERS")
@@ -70,8 +70,8 @@ async.whilst( () => { return i < 1000 }, (next) =>{
 	      return;
 	    }
 	    //Get user info:
-	    var sql = "INSERT INTO \"WEBSTORE\".\"INVENTORY\" (\"INV_QUANTITY_ON_HAND\") VALUES(?)"
-	    conn.querySync(sql, [getRandomInt(0,1000)]);
+	    var sql = "INSERT INTO \"WEBSTORE\".\"INVENTORY\" (\"INV_QUANTITY_ON_HAND\") VALUES("+ getRandomInt(0,1000)+")"
+	    conn.querySync(sql, []);
 	    conn.close();
 	    i++;
 	    console.log("CREATED " + i + " ITEMS")

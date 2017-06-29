@@ -10,8 +10,8 @@ var async = require('async');       // For executing loops asynchronously
 // Enter your database credentials here //
 //////////////////////////////////////////
 db_cred = {
-    db: "WEBSTORE",
-    hostname: "9.108.124.101",
+    db: "SAMPLE",
+    hostname: "127.0.0.1",
     port: 50000,
     username: "db2inst1",
     password: "password"
@@ -149,8 +149,8 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 									purchasingPool.open(connString, (err, conn) => {
 										console.log('CUSTOMER ' + user.C_FIRST_NAME+user.C_LAST_NAME + 'IS BUYING AN ITEM!!!')
 										item = rows[getRandomInt(0,8)] // Randomly select one of the items on this page
-										sql2='INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(?,?,?);'
-										conn.querySync(sql2,[user.C_CUSTOMER_SK, item.INV_ITEM_SK, getRandomInt(1,item.INV_QUANTITY_ON_HAND)]);
+										sql2='INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(' + user.C_CUSTOMER_SK + ', ' + item.INV_ITEM_SK + ', ' + getRandomInt(1,item.INV_QUANTITY_ON_HAND)+ ');'
+										conn.querySync(sql2,[]);
 										conn.close();
 										i++;
 										next()
@@ -212,8 +212,8 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 					console.log(user)	// Let's insert the user info
 					purchasingPool.open(connString, (err, conn) => {
 						// Insert a JSON to the table using JSON2BSON
-						sql = "INSERT INTO  \"WEBSTORE\".\"TESTJSON\" (\"JSON_FIELD\") VALUES(SYSTOOLS.JSON2BSON(?))"
-						conn.querySync(sql, [JSON.stringify(user)]); // It needs to be converted to a string before put in the sql
+						sql = "INSERT INTO  \"WEBSTORE\".\"TESTJSON\" (\"JSON_FIELD\") VALUES(SYSTOOLS.JSON2BSON('" + JSON.stringify(user) + "'))" // It needs to be converted to a string before put in the sql
+						conn.querySync(sql); 
 						console.log(".\n.\n")
 						console.log("NOW LET'S RETRIEVE A JSON FROM THE TABLE")
 						sql = "SELECT SYSTOOLS.BSON2JSON(JSON_FIELD) FROM WEBSTORE.TESTJSON order by rand() fetch first 1 rows only"
