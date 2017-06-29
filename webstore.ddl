@@ -1,3 +1,5 @@
+--THIS FILE CONTAINS SQL WHICH CREATES TABLES AS USED BY THE MOCK WEBSTORE
+
 -- This CLP file was created using DB2LOOK Version "11.1" 
 -- Timestamp: Wed Jun 14 18:19:14 2017
 -- Database Name: WEBSTORE       
@@ -7,8 +9,9 @@
 -- Alternate collating sequence(alt_collate): null
 -- varchar2 compatibility(varchar2_compat): OFF
 
-
-CONNECT TO WEBSTORE;
+-- You can create this database or replace with one you already have
+-- Omit this line if copy-pasting into Run SQL in DSM
+CONNECT TO WEBSTORE; 
 
 ------------------------------------------------
 -- DDL Statements for Schemas
@@ -159,7 +162,7 @@ ALTER TABLE "WEBSTORE"."WEBSALES"
 
 
 
-
+-- Omit these lines if copy-pasting into Run SQL in DSM
 
 COMMIT WORK;
 
@@ -167,3 +170,4 @@ CONNECT RESET;
 
 TERMINATE;
 
+-- Omit these lines if copy-pasting into Run SQL in DSM
