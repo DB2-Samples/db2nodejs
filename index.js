@@ -1,13 +1,3 @@
-// This is the mock webstore app. It simulates simultaneous users logging in,
-// And taking on one of three behaviours:
-// 	- Purchasing (Selects/Inserts)
-//	- Customer Service (Updates/Deletes)
-//	- JSON testing (Selecting/Inserting JSON fields)
-//
-// PREREQUISITES
-// 	- The SQL in webstore.ddl has been run to create the tables used by this app
-//	- The populate.js app has been run to populate the webstore randomly generated customers and inventory
-
 var ibmdb = require('ibm_db');		//For connecting to DB
 var Pool = require("ibm_db").Pool 	// For connection pooling
 var async = require('async');       // For executing loops asynchronously
@@ -20,11 +10,11 @@ var async = require('async');       // For executing loops asynchronously
 // Enter your database credentials here //
 //////////////////////////////////////////
 db_cred = {
-    db: "SAMPLE",
-    hostname: "127.0.0.1",
+    db: "TPCDS_1G",
+    hostname: "9.30.147.53",
     port: 50000,
     username: "db2inst1",
-    password: "password"
+    password: "n1cetest"
 };
 
 ///////////////////////
@@ -160,7 +150,7 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 										console.log('CUSTOMER ' + user.C_FIRST_NAME+user.C_LAST_NAME + 'IS BUYING AN ITEM!!!')
 										item = rows[getRandomInt(0,8)] // Randomly select one of the items on this page
 										sql2='INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(' + user.C_CUSTOMER_SK + ', ' + item.INV_ITEM_SK + ', ' + getRandomInt(1,item.INV_QUANTITY_ON_HAND)+ ');'
-										conn.querySync(sql2,[]);
+										conn.querySync(sql2);
 										conn.close();
 										i++;
 										next()
