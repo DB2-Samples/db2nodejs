@@ -10,7 +10,8 @@
 -- varchar2 compatibility(varchar2_compat): OFF
 
 -- You can create this database or replace with one you already have
-CONNECT TO WEBSTORE; -- Omit this line if copy-pasting into Run SQL in DSM
+-- Omit this line if copy-pasting into Run SQL in DSM
+CONNECT TO WEBSTORE; 
 
 ------------------------------------------------
 -- DDL Statements for Schemas
@@ -161,7 +162,7 @@ ALTER TABLE "WEBSTORE"."WEBSALES"
 
 
 
-
+-- Omit these lines if copy-pasting into Run SQL in DSM
 
 COMMIT WORK;
 
@@ -169,3 +170,4 @@ CONNECT RESET;
 
 TERMINATE;
 
+-- Omit these lines if copy-pasting into Run SQL in DSM
