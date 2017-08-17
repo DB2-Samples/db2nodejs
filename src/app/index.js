@@ -1,5 +1,8 @@
 'use strict';
 var express = require('express');
+var path = require('path');
+var IO = require('socket.io');
+var router = express.Router();
 
 var app = express();
 
