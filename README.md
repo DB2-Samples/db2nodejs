@@ -11,7 +11,7 @@ If you have not already, download node.js and install it on your local machine. 
 1. Clone the app to your local environment from your terminal using the following command:
 
   ```
-    git clone https://github.com/DB2-Samples/db2nodejs.git
+    git clone https://github.com:LarryKX/db2nodejs.git
   ```
 
 2. `cd` into this newly created directory
@@ -32,39 +32,23 @@ If you have not already, download node.js and install it on your local machine. 
     
 2. Run the SQL to create the tables. Run ```db2 -tvf webstore.ddl``` from the Db2 command line. You can also run the script using Data Server Manager. If you use DSM, make sure the SQL Editor Run Method (Edit SQL Options) is set to CLP with SSH.
 
-3. Replace the corresponding credentials for the Db2 database you want to use in the `populate.js` file
-
+3. Replace the corresponding credentials for the Db2 database you want to use in the `db2.config` file
+    i. create db2.json under config folder
+    ii. record the db credential info in db2.json
+```{
+        "db": "WEBSTORE",
+        "hostname": "127.0.0.1",
+        "port": 50000,
+        "username": "DB2INST1",
+        "password": ""
+    }
 ```
-        db: "WEBSTORE",
-        hostname: "127.0.0.1",
-        port: 50000,
-        username: "DB2INST1",
-        password: ""
-```
 
-4. Run ```node populate.js``` to populate the database with some randomly generated customer information and inventory.
+4. Run ```npm run populate``` to populate the database with some randomly generated customer information and inventory.
 
 ## Setting up the app
-1. Replace the corresponding credentials for your DB2 sample database in your `index.js` file
-
-```
-        db: "WEBSTORE",
-        hostname: "LOCALHOST",
-        port: 50000,
-        username: "DB2INST1",
-        password: ""
-```
-
-2. Tweak other parameters in the file as you see fit.
-
-## Running the app
 
 Start your app locally with the following command
-
-  ```
-  node index.js
-  ```
-  or
   ```
   npm start
   ```

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node ./src/app/index.js",
-    "start": "node ./src/utils/index.js"
+    "start": "node ./src/utils/index.js",
+    "populate": "node ./src/utils/populate.js"
   },
   "author": "mkhattab",
   "license": "ISC",
