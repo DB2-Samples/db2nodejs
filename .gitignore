@@ -1,4 +1,4 @@
 node_modules/
 npm-debug.log
-.idea/**/*
-config/db2.json
+config/
+.idea/
