@@ -9,13 +9,7 @@ var async = require('async');       // For executing loops asynchronously
 //////////////////////////////////////////
 // Enter your database credentials here //
 //////////////////////////////////////////
-db_cred = {
-    db: "TPCDS_1G",
-    hostname: "9.30.147.53",
-    port: 50000,
-    username: "db2inst1",
-    password: "n1cetest"
-};
+var db_cred = require('../../config/db2.json');
 
 ///////////////////////
 // Overall Behaviour //

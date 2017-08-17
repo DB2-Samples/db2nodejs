@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "node ./src/app/index.js",
+    "start": "node ./src/utils/index.js"
   },
   "author": "mkhattab",
   "license": "ISC",
   "dependencies": {
     "async": "^2.4.0",
+    "express": "^4.15.4",
     "ibm_db": "^2.0.0"
   }
 }
