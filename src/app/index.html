@@ -1,35 +1,12 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{{roomID}}</title>
+    <title>demo</title>
     <style>
-        #msglog, #messageInput {
-            border: 1px solid #ccc;
-            width: 500px;
-            height: 350px;
-            overflow-y: auto;
-            font-size: 14px;
-        }
-        #messageInput {
-            height: 80px;
-        }
-        .message {
-            line-height: 22px;
-        }
-        .message .user {
-            padding-right: 5px;
-            padding-left: 5px;
-            color: brown;
-        }
-        .sysMsg {
-            color: #c1bfbf;
-            padding-right: 5px;
-            padding-left: 5px;
-            font-size: 12px;
-        }
-        #users {
-            width: 490px;
-            padding: 0 5px 5px;
+        .demo{
+            background: white;
+            width: 800px;
+            height: 600px;
         }
     </style>
 </head>
@@ -39,5 +16,22 @@
 <script src="/build/react.js"></script>
 <script src="/build/react-dom.js"></script>
 <script src="/build/browser.min.js"></script>
+<div onclick="start()">start</div>
+<div id="demo" class="demo">
+
+</div>
+<script>
+    function start(){
+        var socket = io();
+        socket.on('connect', function () {
+            socket.emit('start', "haha");
+        });
+        socket.on('msg', function (msg) {
+            var message = '<p>'+msg+'</p>';
+            var ih = document.getElementById('demo').innerHTML;
+            document.getElementById('demo').innerHTML = ih + message;
+        });
+    }
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 
-function Demo(num, socket) {
+function Demo(num, socket, id, cmd) {
     var ibmdb = require('ibm_db');		//For connecting to DB
     var Pool = require("ibm_db").Pool 	// For connection pooling
     var async = require('async');       // For executing loops asynchronously
@@ -11,7 +11,13 @@ function Demo(num, socket) {
 //////////////////////////////////////////
 // Enter your database credentials here //
 //////////////////////////////////////////
-    var db_cred = require('../../config/db2.json');
+    var db_cred = {
+        "db": "WEBSTORE",
+        "hostname": "9.30.147.53",
+        "port": 50000,
+        "username": "db2inst1",
+        "password": "n1cetest"
+    };
 
 ///////////////////////
 // Overall Behaviour //
@@ -63,7 +69,8 @@ function Demo(num, socket) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
 
-    console.log(new Date())
+    console.log(new Date());
+    socket.to(id).emit(cmd, new Date());
     end_time = new Date().valueOf() + maxRunTime * 60000 // This is the time we want the app to stop running at
 
     ibmdb.debug(true); // Turning debug on allows us to see what queries are run via the console
@@ -94,21 +101,25 @@ function Demo(num, socket) {
         }, (next_run) => { // Loop so when this simulated client ends, a new one starts
             if (new Date().valueOf() >= end_time && maxRunTime != 0) {
                 console.log(new Date());
+                socket.to(id).emit(cmd, new Date());
                 process.exit()
             } // Check if it's time to kill the app
             console.log('### NEW CLIENT IS ABOUT TO GET STARTED ###');
+            socket.to(id).emit(cmd, '### NEW CLIENT IS ABOUT TO GET STARTED ###');
             setTimeout(() => { // Add delay so not all users connect at the same time
                 new Promise((resolve, reject) => {
                     // Simulate the user logging in
                     customerServicePool.open(connString, (err, conn) => {
                         if (err) {
                             console.log(err);
+                            socket.to(id).emit(cmd, err);
                             return;
                         }
                         //Get user info:
                         var sql = "select * from WEBSTORE.CUSTOMER order by RAND() fetch first 1 rows only"
                         var user = conn.querySync(sql)[0];
                         console.log("Welcome back " + user.C_SALUTATION + user.C_LAST_NAME);
+                        socket.to(id).emit(cmd, "Welcome back " + user.C_SALUTATION + user.C_LAST_NAME);
                         conn.close();
                         resolve(user);
                     });
@@ -117,19 +128,23 @@ function Demo(num, socket) {
 
                     if (choiceOfAction <= purchasingWeight) { // In this case, the customer has logged in to make a purchase
                         console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO MAKE A PURCHASE');
+                        socket.to(id).emit(cmd, 'CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO MAKE A PURCHASE');
                         //Simulate browsing
                         var browses = getRandomInt(minBrowses, maxBrowses); // Random number of pages to browse
                         console.log("Browses to commence: " + browses);
+                        socket.to(id).emit(cmd, "Browses to commence: " + browses);
 
                         var i = 0; // Counter for following loop
                         async.whilst(() => { // Loop for page browses
                             return i < browses;
                         }, (next) => {
                             console.log('BROWSE ' + i);
+                            socket.to(id).emit(cmd, 'BROWSE ' + i);
 
                             var waitTime = getRandomInt(minTimeout, maxTimeout); // Wait time used to create lag between page browses
 
                             console.log('Waiting for ' + waitTime + ' ms...');
+                            socket.to(id).emit(cmd, 'Waiting for ' + waitTime + ' ms...');
                             setTimeout(() => {
                                 new Promise((resolve2, reject2) => {
                                     purchasingPool.open(connString, (err, conn) => { // Open a connection in the purchasingPool
@@ -137,6 +152,7 @@ function Demo(num, socket) {
                                         var sql1 = "select * from WEBSTORE.INVENTORY where INV_QUANTITY_ON_HAND > 0 order by RAND() fetch first 9 rows only"
                                         var rows = conn.querySync(sql1);
                                         console.log('Page recieved...');
+                                        socket.to(id).emit(cmd, 'Page recieved...');
                                         conn.close()
                                         resolve2(rows)
                                     })
@@ -146,7 +162,8 @@ function Demo(num, socket) {
                                     if (getRandomInt(0, 100) <= buyingPercent) {
 
                                         purchasingPool.open(connString, (err, conn) => {
-                                            console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS BUYING AN ITEM!!!')
+                                            console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS BUYING AN ITEM!!!');
+                                            socket.to(id).emit(cmd, 'Page recieved...');
                                             item = rows[getRandomInt(0, 8)] // Randomly select one of the items on this page
                                             sql2 = 'INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(' + user.C_CUSTOMER_SK + ', ' + item.INV_ITEM_SK + ', ' + getRandomInt(1, item.INV_QUANTITY_ON_HAND) + ');'
                                             conn.querySync(sql2);
@@ -166,17 +183,20 @@ function Demo(num, socket) {
 
                         }, () => {
                             console.log('Done browsing...');
+                            socket.to(id).emit(cmd, 'Done browsing...');
                             next_run();
                         }) // Done browsing. End this client and start a new one
 
                     }
                     else if (choiceOfAction <= purchasingWeight + customerServiceWeight) { // In this case, the customer has logged in to alter/cancel their order
-                        console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO UPDATE THEIR ORDER')
+                        console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO UPDATE THEIR ORDER');
+                        socket.to(id).emit(cmd, 'CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO UPDATE THEIR ORDER');
                         setTimeout(() => {
                             // In this case we want to use the customer service connection pool
                             customerServicePool.open(connString, (err, conn) => {
                                 if (err) {
                                     console.log(err);
+                                    socket.to(id).emit(cmd, err);
                                     return;
                                 }
 
@@ -198,8 +218,10 @@ function Demo(num, socket) {
 
                                 }
                                 catch (err) { // Alert if there are no orders for this customer
-                                    console.log(err)
-                                    console.log('SILLY ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'HAS NO ORDERS TO UPDATE!!')
+                                    console.log(err);
+                                    socket.to(id).emit(cmd, err);
+                                    console.log('SILLY ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'HAS NO ORDERS TO UPDATE!!');
+                                    socket.to(id).emit(cmd, 'SILLY ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'HAS NO ORDERS TO UPDATE!!');
                                     conn.close();
                                 }
                                 conn.close();
@@ -208,8 +230,8 @@ function Demo(num, socket) {
                         }, getRandomInt(minTimeout, maxTimeout)) // Random timeout on order altering
                     }
                     else { // JSON stuff
-                        console.log("LET'S TEST OUT JSON FUNCTIONALITY!")
-                        console.log("HERE IS A JSON WE WANT TO INSERT")
+                        console.log("LET'S TEST OUT JSON FUNCTIONALITY!");
+                        console.log("HERE IS A JSON WE WANT TO INSERT");
                         console.log(user)	// Let's insert the user info
                         purchasingPool.open(connString, (err, conn) => {
                             // Insert a JSON to the table using JSON2BSON
