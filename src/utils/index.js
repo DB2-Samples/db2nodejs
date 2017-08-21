@@ -9,9 +9,17 @@ var async = require('async');       // For executing loops asynchronously
 //////////////////////////////////////////
 // Enter your database credentials here //
 //////////////////////////////////////////
-var db_cred = require('../../config/db2.json');
+//var db_cred = require('../../config/db2.json');
 
 ///////////////////////
+db_cred = {
+    db: "WEBSTORE",
+    hostname: "9.30.147.53",
+    port: 50000,
+    username: "db2inst1",
+    password: "n1cetest"
+};
+
 // Overall Behaviour //
 ///////////////////////
 var numClients = 4; 	// Number of simulated clients
@@ -95,7 +103,7 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 			new Promise( (resolve,reject) => {
 				// Simulate the user logging in
 				customerServicePool.open(connString, (err, conn) => {
-					if (err) 
+					if (err)
 				    {
 				      console.log(err);
 				      return;
@@ -107,18 +115,18 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 				    conn.close();
 				    resolve(user);
 				});
-			}).then( (user) => { // Now we have the user info 
+			}).then( (user) => { // Now we have the user info
 				choiceOfAction = getRandomInt(1,sumPoolUsageWeights) //we randomly decide their behaviour based on weights
-				
+
 				if (choiceOfAction <= purchasingWeight){ // In this case, the customer has logged in to make a purchase
 					console.log('CUSTOMER ' + user.C_FIRST_NAME+user.C_LAST_NAME + 'IS HERE TO MAKE A PURCHASE');
 					//Simulate browsing
 				    var browses = getRandomInt(minBrowses,maxBrowses); // Random number of pages to browse
 				    console.log("Browses to commence: " + browses);
-				    
+
 				    var i = 0; // Counter for following loop
 				    async.whilst( () => { // Loop for page browses
-				    	return i < browses; 
+				    	return i < browses;
 				    }, (next) => {
 				    	console.log('BROWSE ' + i);
 
@@ -130,7 +138,7 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 				    			purchasingPool.open(connString, (err, conn) => { // Open a connection in the purchasingPool
 				    				// Here we get the page by randomly selecting 9 items
 				    				var sql1 = "select * from WEBSTORE.INVENTORY where INV_QUANTITY_ON_HAND > 0 order by RAND() fetch first 9 rows only"
-				    				var rows = conn.querySync(sql1); 
+				    				var rows = conn.querySync(sql1);
 									console.log('Page recieved...');
 									conn.close()
 									resolve2(rows)
@@ -149,7 +157,7 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 										i++;
 										next()
 									})
-									
+
 								} else { // If no purchasing, just move onto next page browse
 									i++; // Increment browsing counter
 									next(); // Go to next browse
@@ -160,14 +168,14 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 				    	} , waitTime); // This is a time delay on customer starting browsing to next page
 
 					}, () => {console.log('Done browsing...'); next_run();}) // Done browsing. End this client and start a new one
-					
-				} 
+
+				}
 				else if (choiceOfAction <= purchasingWeight + customerServiceWeight) { // In this case, the customer has logged in to alter/cancel their order
 					console.log('CUSTOMER ' + user.C_FIRST_NAME+user.C_LAST_NAME + 'IS HERE TO UPDATE THEIR ORDER')
 					setTimeout( () => {
 						// In this case we want to use the customer service connection pool
 						customerServicePool.open(connString, (err, conn) => {
-							if (err) 
+							if (err)
 						    {
 						      console.log(err);
 						      return;
@@ -188,7 +196,7 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 						    		sql = "DELETE FROM WEBSTORE.WEBSALES WHERE WS_CUSTOMER_SK = " + user.C_CUSTOMER_SK + " AND WS_ORDER_NUMBER = " + order.WS_ORDER_NUMBER + " AND WS_ITEM_SK = " + order.WS_ITEM_SK
 						    		conn.querySync(sql)
 						    	}
-						    	
+
 						    }
 						    catch(err){ // Alert if there are no orders for this customer
 						    	console.log(err)
@@ -197,7 +205,7 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 						    }
 						    conn.close();
 						    next_run(); // Done altering order. End this client and start a new one
-						});	
+						});
 					}, getRandomInt(minTimeout,maxTimeout)) // Random timeout on order altering
 				}
 				else { // JSON stuff
@@ -207,21 +215,21 @@ for (var k = 0; k < numClients; k++){	// Each iteration of the for loop starts a
 					purchasingPool.open(connString, (err, conn) => {
 						// Insert a JSON to the table using JSON2BSON
 						sql = "INSERT INTO  \"WEBSTORE\".\"TESTJSON\" (\"JSON_FIELD\") VALUES(SYSTOOLS.JSON2BSON('" + JSON.stringify(user) + "'))" // It needs to be converted to a string before put in the sql
-						conn.querySync(sql); 
+						conn.querySync(sql);
 						console.log(".\n.\n")
 						console.log("NOW LET'S RETRIEVE A JSON FROM THE TABLE")
 						sql = "SELECT SYSTOOLS.BSON2JSON(JSON_FIELD) FROM WEBSTORE.TESTJSON order by rand() fetch first 1 rows only"
 						result = conn.querySync(sql)
 						console.log(result[0]['1']) // For some reason the JSON is returned inside another JSON with one element labeled '1'
 
-						conn.close() 
+						conn.close()
 						next_run(); //Done demoing JSON.
 					})
-					
+
 				}
 
 			})
-			
+
 		}, getRandomInt(minTimeout,maxTimeout))
 
 	})

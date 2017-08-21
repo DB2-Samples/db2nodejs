@@ -1,7 +1,7 @@
 // This small app will populate the mock webstore database with
 // randomly generated customers and inventory.
 //
-// PREREQUISITE: 
+// PREREQUISITE:
 // 	- Run the SQL in webstore.ddl to create the tables this app will populate
 
 var ibmdb = require('ibm_db');		//For connecting to DB
@@ -11,11 +11,18 @@ var async = require('async');       // For executing loops asynchronously
 //************//
 // PARAMETERS //
 //************//
-
+db_cred = {
+    db: "WEBSTORE",
+    hostname: "9.30.147.53",
+    port: 50000,
+    username: "db2inst1",
+    password: "n1cetest"
+};
+//select name from tabl1 where id = 2
 //////////////////////////////////////////
 // Enter your database credentials here //
 //////////////////////////////////////////
-var db_cred = require('../../config/db2.json');
+//var db_cred = require('../../config/db2.json');
 
 // Turn database credentials into a connection string
 var connString = "DATABASE=" + db_cred.db + ";UID=" + db_cred.username + ";PWD=" + db_cred.password + ";HOSTNAME=" + db_cred.hostname + ";port=" + db_cred.port;
@@ -44,7 +51,7 @@ pool.init(1, connString)
 i = 0
 async.whilst( () => { return i < 100 }, (next) =>{
 	pool.open(connString, (err, conn) => {
-		if (err) 
+		if (err)
 	    {
 	      console.log(err);
 	      return;
@@ -64,7 +71,7 @@ async.whilst( () => { return i < 100 }, (next) =>{
 i = 0
 async.whilst( () => { return i < 1000 }, (next) =>{
 	pool.open(connString, (err, conn) => {
-		if (err) 
+		if (err)
 	    {
 	      console.log(err);
 	      return;
