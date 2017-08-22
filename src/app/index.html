@@ -1,0 +1,82 @@
+
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/build/react.js"></script>
+    <script src="/build/react-dom.js"></script>
+    <script src="/build/browser.min.js"></script>
+    <style>
+    .demo{
+        margin:0 auto;
+        background: white;
+        width:500px;
+        height:800px;
+        border:2px solid black;
+        overflow:auto;
+
+    }
+    .center{
+      text-align: center;
+      width:1200px;
+      margin:0 auto;
+    }
+      .div1 {
+        margin:0 auto;
+        text-align: center;
+        width:400px;
+        height:800px;
+        border:2px solid black;
+      float:left;
+    }
+    .input{
+
+      width:300px;
+      height:50px;
+      border:2px solid blue;
+    }
+    .btn1{
+      width:300px;
+      height:50px;
+    }
+    .btn2{
+      width:300px;
+      height:50px;
+    }
+
+    </style>
+</head>
+<body>
+  <div class="center">
+<h1 >db2nodejs_project</h1>
+<div class="div1">
+  <br/><br/><br/><br/><br/><br/>
+  <input type="text" class="input"></input>
+  <br/><br/><br/>
+  <button onclick="start()" class="btn1">start</button>
+  <br/><br/><br/>
+  <button onclick="start()" class="btn2">stop</button>
+</div>
+<div id="demo" class="demo"></div>
+</div>
+<script>
+    function start(){
+        var socket = io();
+        socket.on('connect', function () {
+            socket.emit('start', "haha");
+        });
+        socket.on('msg', function (msg) {
+            var message = '<p>'+msg+'</p>';
+            var ih = document.getElementById('demo').innerHTML;
+            document.getElementById('demo').innerHTML = ih + message;
+        });
+    }
+</script>
+
+
+<script type="text/babel">
+
+</script>
+</body>
+</html>
