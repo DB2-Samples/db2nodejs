@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "node ./src/app/index.js",
-    "start": "node ./src/utils/index.js",
-    "populate": "node ./src/utils/populate.js"
+    "start": "node ./src/app/utils/index.js",
+    "populate": "node ./src/app/utils/populate.js"
   },
   "author": "mkhattab",
   "license": "ISC",
   "dependencies": {
     "async": "^2.4.0",
     "express": "^4.15.4",
-    "ibm_db": "^2.0.0"
+    "ibm_db": "^2.0.0",
+    "socket.io": "^2.0.3"
   }
 }
