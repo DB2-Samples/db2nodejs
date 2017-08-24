@@ -1,7 +1,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>demo</title>
+    <title>{{userID}}</title>
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-grid.min.css">
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-reboot.min.css">
@@ -45,25 +45,8 @@
         .credential h4, .client-control h4{
             margin-bottom: 20px;
         }
-        #demo p{
-            position: relative;
-            color: white;
-            padding:0;
-            padding-left:35px;
-            font-size: 14px;
-            line-height: 18px;
-            margin:0;
-        }
-        #demo p span.row{
-            display: inline-block;
-            position: absolute;
-            left: 18px;
-            top:2px;
-            height:14px;
-            font-size: 12px;
-            line-height: 14px;
-            color: #CDCDCD;
-            font-style:italic;
+        #demo div{
+            margin: 20px 10px;
         }
 
     </style>
@@ -108,7 +91,7 @@
                         <input type="text" class="form-control" id="clientnumber" aria-describedby="emailHelp" placeholder="Enter clients number">
                   </div>
                   <button type="button" onclick="start()" class="btn btn-primary">START</button>
-                  <button type="button" class="btn btn-danger">STOP</button>
+                  <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
                 </form>
             </div>
         </span>
@@ -118,6 +101,56 @@
     </div>
 <script>
     var i = 1;
+    var socket = io();
+    var shops = {};
+    var bgColor = ["alert-success", "alert-info", "alert-warning", "alert-danger"];
+    socket.on('connect', function () {
+
+    });
+
+    function buildRetailer(num){
+        document.getElementById('demo').innerHTML = "";
+        shops = {};
+        for(var i=1;i<=parseInt(num);i++){
+            var shop = '<div id="shop'+i+'" class="alert '+bgColor[i%4]+'">Building</div>';
+            document.getElementById('demo').innerHTML += shop;
+            shops['shop'+i] = [];
+        }
+    }
+
+    function handleRetailer(num, user, verb){
+        var key = "shop"+num;
+        var shop = document.getElementById(key);
+        if(shop) {
+            if (user == "OPEN" && verb == "OPEN") {
+                shop.innerHTML = "OPEN!!!";
+            }
+            else if (user == "CLOSE" && verb == "CLOSE") {
+                shop.innerHTML = "CLOSED!!!";
+            }
+            else {
+                var retailer = shops[key]
+                var inn = "";var j = -1;
+                for(var i = 0;i < retailer.length;i++){
+                    var br = i==(retailer.length-1)?"":'<br/>';
+                    if(retailer[i].name==user){
+                        inn += user + ' ' + verb + br;
+                        j = i;
+                    }
+                    else inn += retailer[i].name + ' ' + retailer[i].verb + br;
+                }
+                if(j==-1){
+                    var br = retailer.length==0?"":'<br/>';
+                    inn += br + user + ' ' + verb;
+                    retailer.push({name:user,verb:verb});
+                }
+                shop.innerHTML = inn;
+                if(verb=="signs out")
+                    retailer.splice(j,1);
+            }
+        }
+    }
+
     function start(){
         var reg = /^[0-9]*[1-9][0-9]*$/;
         var num = document.getElementById("clientnumber").value;
@@ -125,15 +158,15 @@
             alert("Please enter a digit number");
             return ;
         }
-        var socket = io();
-        socket.on('connect', function () {
-            socket.emit('start', "haha");
+
+        socket.emit('start', num);
+        buildRetailer(num);
+        socket.on('msg', function (clientNum, user, verb) {
+            handleRetailer(clientNum, user, verb);
         });
-        socket.on('msg', function (msg) {
-            var message = '<p><span class="row">'+(i++)+'</span>'+msg+'</p>';
-            var ih = document.getElementById('demo').innerHTML;
-            document.getElementById('demo').innerHTML = ih + message;
-        });
+    }
+    function stop(){
+        socket.emit('stop','haha');
     }
     function toggle() {
         var width = document.querySelector('.left-control').style.width;
