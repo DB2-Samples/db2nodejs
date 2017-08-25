@@ -69,8 +69,6 @@ function Demo(num, socket, id, cmd, stop) {
     function getRandomInt(minimum, maximum) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
-
-    console.log(new Date());
     socket.to(id).emit(cmd, new Date());
     end_time = new Date().valueOf() + maxRunTime * 60000 // This is the time we want the app to stop running at
 
@@ -103,11 +101,9 @@ function Demo(num, socket, id, cmd, stop) {
             return stop();
         }, (next_run) => { // Loop so when this simulated client ends, a new one starts
             if (new Date().valueOf() >= end_time && maxRunTime != 0) {
-                console.log(new Date());
                 socket.to(id).emit(cmd, new Date());
                 process.exit()
             } // Check if it's time to kill the app
-            console.log('### NEW CLIENT IS ABOUT TO GET STARTED ###');
             var k = getRandomInt(1, numClients);
             socket.to(id).emit(cmd, j, 'OPEN', 'OPEN');
             setTimeout(() => { // Add delay so not all users connect at the same time
@@ -123,7 +119,6 @@ function Demo(num, socket, id, cmd, stop) {
                         var sql = "select * from WEBSTORE.CUSTOMER order by RAND() fetch first 1 rows only"
                         var user = conn.querySync(sql)[0];
                         let UserName = user.C_SALUTATION + user.C_LAST_NAME;
-                        console.log("Welcome back " + user.C_SALUTATION + user.C_LAST_NAME);
                         socket.to(id).emit(cmd, k, UserName, "signes in");
                         conn.close();
                         resolve(user);
@@ -132,21 +127,17 @@ function Demo(num, socket, id, cmd, stop) {
                     choiceOfAction = getRandomInt(1, sumPoolUsageWeights) //we randomly decide their behaviour based on weights
                     let UserName = user.C_SALUTATION + user.C_LAST_NAME;
                     if (choiceOfAction <= purchasingWeight) { // In this case, the customer has logged in to make a purchase
-                        console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO MAKE A PURCHASE');
                         socket.to(id).emit(cmd, k, UserName, 'starts purchasing');
                         //Simulate browsing
                         var browses = getRandomInt(minBrowses, maxBrowses); // Random number of pages to browse
-                        console.log("Browses to commence: " + browses);
 
                         var i = 0; // Counter for following loop
                         async.whilst(() => { // Loop for page browses
                             return i < browses;
                         }, (next) => {
-                            console.log('BROWSE ' + i);
 
                             var waitTime = getRandomInt(minTimeout, maxTimeout); // Wait time used to create lag between page browses
 
-                            console.log('Waiting for ' + waitTime + ' ms...');
                             socket.to(id).emit(cmd, k, UserName, 'is waiting for ' + waitTime + ' ms to browse');
                             setTimeout(() => {
                                 new Promise((resolve2, reject2) => {
@@ -154,7 +145,6 @@ function Demo(num, socket, id, cmd, stop) {
                                         // Here we get the page by randomly selecting 9 items
                                         var sql1 = "select * from WEBSTORE.INVENTORY where INV_QUANTITY_ON_HAND > 0 order by RAND() fetch first 9 rows only"
                                         var rows = conn.querySync(sql1);
-                                        console.log('Page recieved...');
                                         socket.to(id).emit(cmd, k, UserName, 'starts to browse');
                                         conn.close()
                                         resolve2(rows)
@@ -165,7 +155,6 @@ function Demo(num, socket, id, cmd, stop) {
                                     if (getRandomInt(0, 100) <= buyingPercent) {
 
                                         purchasingPool.open(connString, (err, conn) => {
-                                            console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS BUYING AN ITEM!!!');
                                             socket.to(id).emit(cmd, k, UserName, 'is buying an item');
                                             item = rows[getRandomInt(0, 8)] // Randomly select one of the items on this page
                                             sql2 = 'INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(' + user.C_CUSTOMER_SK + ', ' + item.INV_ITEM_SK + ', ' + getRandomInt(1, item.INV_QUANTITY_ON_HAND) + ');'
@@ -185,14 +174,12 @@ function Demo(num, socket, id, cmd, stop) {
                             }, waitTime); // This is a time delay on customer starting browsing to next page
 
                         }, () => {
-                            console.log('Done browsing...');
                             socket.to(id).emit(cmd, k, UserName, 'signs out');
                             next_run();
                         }) // Done browsing. End this client and start a new one
 
                     }
                     else if (choiceOfAction <= purchasingWeight + customerServiceWeight) { // In this case, the customer has logged in to alter/cancel their order
-                        console.log('CUSTOMER ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'IS HERE TO UPDATE THEIR ORDER');
                         socket.to(id).emit(cmd, k, UserName, 'is here to update his order');
                         setTimeout(() => {
                             // In this case we want to use the customer service connection pool

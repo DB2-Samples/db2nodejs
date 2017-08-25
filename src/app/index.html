@@ -51,6 +51,8 @@
         .login{
             width:100%;
             margin-top: 20px;
+            background-color: #325c80;
+            border:none;
         }
         .main{
             position: relative;
@@ -58,6 +60,14 @@
             left:0;
             width:100%;
             height:100%;
+        }
+        .footer{
+            width:100%;
+            height:23%;
+            position: absolute;
+            bottom:0;
+            background-color: #325c80;
+            opacity: 0.9;
         }
 
     </style>
@@ -68,17 +78,17 @@
     <div class="main">
         <div class="input">
             <div class="logo"><img  src="source/duola-a-meng_24.png"/></div>
-            <form name="db2credential">
-                <p>Please enter your user name</p>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="User name.">
-                    <button onclick="login()" class="btn login btn-primary" type="button">
-                        Sign in
-                    </button>
-                </div>
-            </form>
+            <p>Please enter your user name</p>
+            <div class="form-group">
+                <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="User name.">
+                <button onclick="login()" class="btn login btn-primary" type="button">
+                    Sign in
+                </button>
+            </div>
         </div>
+
     </div>
+    <div class="footer"></div>
 </body>
 <script>
     var stable = 4160 / 3120;
@@ -107,16 +117,22 @@
     var init = function(){
         window.onresize = resize;
         window.onload = load;
+        document.getElementById('username').onkeydown = function(e){
+            if(e.which===13){
+                login();
+            }
+        }
     }
     init();
     function login(){
         var user = document.getElementById("username").value;
-        if(/^[a-zA-Z]*$/g.test(user)){
-            window.location.href = '/'+user.toLowerCase();
+        if(user&&/^[a-zA-Z]*$/g.test(user)){
+            window.location.replace('/'+user);
         }
-        else{
+        else if(user){
             alert('You can only input letters')
         }
+        return false;
     }
 </script>
 </html>

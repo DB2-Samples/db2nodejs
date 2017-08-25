@@ -64,10 +64,18 @@ socketIO.on('connection', function (socket) {
 router.get('/:userID', function (req, res) {
     var userID = req.params.userID;
 
+    if(userID=="submit_Form"){
+        var user = req.query.username;
+        res.render('index_bck', {
+            userID: user
+        });
+    }
     // 渲染页面数据(见views/room.hbs)
-    res.render('index_bck', {
-        userID: userID
-    });
+    else {
+        res.render('index_bck', {
+            userID: userID
+        });
+    }
 });
 console.log(__dirname);
 app.use('/', router);

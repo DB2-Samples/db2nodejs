@@ -60,7 +60,6 @@
         <span style="width: 30%;" class="left-control bg-light">
             <div class="credential">
                 <h4>DB2 Credential</h4>
-                <form name="db2credential">
                    <div class="row form-group">
                         <div class="col-7">
                           <input type="text" class="form-control" placeholder="Host name">
@@ -78,18 +77,15 @@
                   <div class="form-group">
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
                   </div>
-                  <button type="submit" class="btn btn-primary">Test connection</button>
-                </form>
+                    <div style="margin-top:10px;"><button type="submit" class="btn btn-primary">Load data</button></div>
             </div>
             <div class="client-control">
                 <h4>Client config</h4>
-                <form name="db2credential">
                     <div class="form-group">
                         <input type="text" class="form-control" id="clientnumber" aria-describedby="emailHelp" placeholder="Enter clients number">
                   </div>
-                  <button type="button" onclick="start()" class="btn btn-primary">START</button>
+                 <button type="button" onclick="start()" class="btn btn-primary">START</button>
                   <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
-                </form>
             </div>
         </span>
         <span style="width: 70%;" id="demo" class="main-screen bg-secondary">
