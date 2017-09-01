@@ -6,10 +6,8 @@
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-grid.min.css">
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-reboot.min.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="build/react.js"></script>
-    <script src="build/react-dom.js"></script>
-    <script src="build/browser.min.js"></script>
     <script src="build/jquery.min.js"></script>
+    <script src="service/service.js"></script>
     <style>
         .main {
             height: calc(100% - 56px);
@@ -48,6 +46,9 @@
         #demo div{
             margin: 20px 10px;
         }
+        button{
+            margin:10px;
+        }
 
     </style>
 </head>
@@ -63,36 +64,36 @@
         <span style="width: 30%;" class="left-control bg-light">
             <div class="credential">
                 <h4>DB2 Credential</h4>
-                <form name="db2credential">
                    <div class="row form-group">
                         <div class="col-7">
-                          <input type="text" class="form-control" placeholder="Host name">
+                          <input id="hostname" name="hostname" type="text" class="form-control" placeholder="Host name">
                         </div>
                         <div class="col-5">
-                          <input type="number" class="form-control" placeholder="Port">
+                          <input id="port" name="port" type="number" class="form-control" placeholder="Port">
                         </div>
                     </div>
                   <div class="form-group">
-                    <input type="text" class="form-control" id="dbname" aria-describedby="emailHelp" placeholder="DB name ">
+                    <input type="text" class="form-control" id="dbname" name="dbname" aria-describedby="emailHelp" placeholder="DB name ">
                   </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
+                    <input type="text" class="form-control" id="dbuser" name="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
                   </div>
                   <div class="form-group">
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <input type="password" id="dbpassword" name="dbpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
                   </div>
-                  <button type="submit" class="btn btn-primary">Test connection</button>
-                </form>
+                    <div style="margin-top:10px;">
+                        <button onclick="test()" type="submit" class="btn btn-primary">Test connection</button>
+                        <button onclick="load()" type="submit" class="btn btn-primary">Load data</button>
+                        <button onclick="load()" type="submit" class="btn btn-danger">Clear data</button>
+                    </div>
             </div>
             <div class="client-control">
                 <h4>Client config</h4>
-                <form name="db2credential">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="clientnumber" aria-describedby="emailHelp" placeholder="Enter clients number">
+                        <input type="text"  class="form-control" id="clientnumber" aria-describedby="emailHelp" placeholder="Enter clients number">
                   </div>
-                  <button type="button" onclick="start()" class="btn btn-primary">START</button>
+                 <button type="button" onclick="start()" class="btn btn-primary">START</button>
                   <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
-                </form>
             </div>
         </span>
         <span style="width: 70%;" id="demo" class="main-screen bg-secondary">
@@ -104,6 +105,14 @@
     var socket = io();
     var shops = {};
     var bgColor = ["alert-success", "alert-info", "alert-warning", "alert-danger"];
+    window.service = new LoadData();
+
+    document.getElementById('clientnumber').onkeydown = function(e){
+        if(e.which===13){
+            start();
+        }
+    }
+
     socket.on('connect', function () {
 
     });
@@ -152,17 +161,34 @@
     }
 
     function start(){
+        var params = getFormBody();
+        if(!params){
+            alert("Please enter the db2 credential first!");
+            return ;
+        }
         var reg = /^[0-9]*[1-9][0-9]*$/;
         var num = document.getElementById("clientnumber").value;
+        if(!num) return;
         if(!reg.test(num)){
             alert("Please enter a digit number");
             return ;
         }
 
-        socket.emit('start', num);
+        params.num = num;
+
+        socket.emit('start', params);
         buildRetailer(num);
         socket.on('msg', function (clientNum, user, verb) {
             handleRetailer(clientNum, user, verb);
+        });
+
+        socket.on('sys', function (stat) {
+            if(stat=='nocred'){
+                alert("Db2 connection failed");
+            }
+            if(stat=='nodata'){
+                alert("No data in certain db, please load data first");
+            }
         });
     }
     function stop(){
@@ -177,6 +203,42 @@
         }
         document.querySelector('.left-control').style.width = width1;
         document.querySelector('.main-screen').style.width = width2;
+    }
+    function getFormBody(){
+        var hostname = document.getElementById("hostname").value;
+        var port = document.getElementById("port").value;
+        var db = document.getElementById("dbname").value;
+        var username = document.getElementById("dbuser").value;
+        var password = document.getElementById("dbpassword").value;
+        if(hostname && port && db && username && password)
+            return {hostname, port, db, username, password};
+        else {
+            return null;
+        }
+    }
+    function load(){
+        var params = getFormBody();
+        if(params) {
+            params.cmd = "load";
+            service.load(params);
+        }
+        else alert("Please enter the db2 credential first!");
+    }
+    function test(){
+        var params = getFormBody();
+        if(params) {
+            params.cmd = "test";
+            service.load(params);
+        }
+        else alert("Please enter the db2 credential first!");
+    }
+    function clear(){
+        var params = getFormBody();
+        if(params) {
+            params.cmd = "clear";
+            service.load(params);
+        }
+        else alert("Please enter the db2 credential first!");
     }
 </script>
 

@@ -15,6 +15,11 @@ app.set('view engine', 'hbs');
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'hbs');
 
+
+app.get('/')
+
+
+
 // 创建socket服务
 var socketIO = IO(server);
 var socketList = {};

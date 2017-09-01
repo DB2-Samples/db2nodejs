@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <title>Project X</title>
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap.min.css">
+    <script src="build/jquery.min.js"></script>
     <style>
         body{
             width:100%;
@@ -81,6 +82,30 @@
     });
     })
     </script>
+
+    <script>
+    $(function(){
+      $('#password').blur(function(){
+        $.ajax({
+          type:"GET"
+          url:"index.js",
+          data:{'password':$("#password").val()},
+          async:true,
+          success: function(data){
+        if (data){
+            alert('登录成功')
+        }else{
+            alert('帐号或密码错误');
+        }
+    },
+    error: function(){
+        alert('服务端异常');
+    }
+
+        })
+      })
+    })
+    </script>
 </head>
 <body>
     <div class="blur">
@@ -91,6 +116,7 @@
             <p>Please enter your user name</p>
             <div class="form-group">
                 <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="User name.">
+                <input type="text" class="form-control" name="password" id="password" aria-describedby="emailHelp" placeholder="Password.">
                 <button onclick="login()" class="btn login btn-primary" type="button">
                     Sign in
                 </button>
@@ -145,4 +171,6 @@
         return false;
     }
 </script>
+
+
 </html>
