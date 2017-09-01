@@ -172,7 +172,9 @@ router.get('/:userID', function (req, res) {
     }
 
     else {
-        let {hostname, port, db, username, password} = dbCredList[userID]||{hostname:"", port:"", db:"", username:"", password:""}
+        let cred = {hostname:"", port:"", db:"", username:"", password:""};
+        if(dbCredList[userID]) cred = dbCredList[userID]
+        let {hostname, port, db, username, password} = cred;
         res.render('index_bck', {
             userID: userID,
             hostname, port, db, username, password
