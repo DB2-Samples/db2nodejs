@@ -3,7 +3,7 @@
 //
 // PREREQUISITE:
 // 	- Run the SQL in webstore.ddl to create the tables this app will populate
-
+'use strict';
 var ibmdb = require('ibm_db');		//For connecting to DB
 var Pool = require("ibm_db").Pool 	// For connection pooling
 var async = require('async');       // For executing loops asynchronously
@@ -11,7 +11,7 @@ var async = require('async');       // For executing loops asynchronously
 //************//
 // PARAMETERS //
 //************//
-db_cred = {
+let db_cred = {
     db: "WEBSTORE",
     hostname: "9.30.147.53",
     port: 50000,
@@ -34,12 +34,12 @@ function getRandomInt(minimum, maximum){
  // Turning debug on allows us to see what queries are run via the console
 
 
-first_names = ["Jim", "John", "Michael", "Omar", "Phyllis", "Mary", "Sheena", "Bob", "Robert", "Ignis", "Ingrid", "Amanda", "Jennifer", "Noah"]
-fnc=first_names.length;
-last_names = ["Goldberg", "Greene", "Richardson", "de Toulouse-Lautrec", "Porter", "Dormer", "Clooney", "Abeo", "Mansbridge"]
-lnc = last_names.length;
-salutations = ["Mr.", "Mrs.", "Ms.", "Sir", "Dr."]
-sc = salutations.length;
+let first_names = ["Jim", "John", "Michael", "Omar", "Phyllis", "Mary", "Sheena", "Bob", "Robert", "Ignis", "Ingrid", "Amanda", "Jennifer", "Noah"]
+let fnc=first_names.length;
+let last_names = ["Goldberg", "Greene", "Richardson", "de Toulouse-Lautrec", "Porter", "Dormer", "Clooney", "Abeo", "Mansbridge"]
+let lnc = last_names.length;
+let salutations = ["Mr.", "Mrs.", "Ms.", "Sir", "Dr."]
+let sc = salutations.length;
 
 // Setup connection pool used for making purchases
 var loadData = (pool, cred, callback) => {
