@@ -1,5 +1,5 @@
 
-function Demo(num, socket, id, cmd, stop) {
+function Demo(num, socket, id, cmd, stop, cred) {
     var ibmdb = require('ibm_db');		//For connecting to DB
     var Pool = require("ibm_db").Pool 	// For connection pooling
     var async = require('async');       // For executing loops asynchronously
@@ -11,7 +11,7 @@ function Demo(num, socket, id, cmd, stop) {
 //////////////////////////////////////////
 // Enter your database credentials here //
 //////////////////////////////////////////
-    var db_cred = {
+    var db_cred = cred||{
         "db": "WEBSTORE",
         "hostname": "9.30.147.53",
         "port": 50000,
@@ -277,13 +277,14 @@ function Demo(num, socket, id, cmd, stop) {
         }
     }
 }
-function product(num, socket, id, cmd) {
+function product(num, socket, id, cmd, cred) {
     this.num = num;
     this.socket = socket;
     this.id = id;
     this.cmd = cmd;
+    this.cred = cred;
     this.isNotStop = true;
-    this.start = ()=>{Demo(this.num, this.socket, this.id, this.cmd, this.getStop);}
+    this.start = ()=>{Demo(this.num, this.socket, this.id, this.cmd, this.getStop, this.cred);}
     this.stop = () => {console.log("stop this");this.isNotStop = false};
     this.getStop = ()=>this.isNotStop;
 }
