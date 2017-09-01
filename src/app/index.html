@@ -1,182 +1,94 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{{userID}}</title>
-    <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-grid.min.css">
-    <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-reboot.min.css">
+    <title>demo</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="build/react.js"></script>
     <script src="build/react-dom.js"></script>
     <script src="build/browser.min.js"></script>
-    <script src="build/jquery.min.js"></script>
+    <script src="build/jquery-3.2.1.js" type="text/javascript"></script>
     <style>
-        .main {
-            height: calc(100% - 56px);
-            width: 100%;
-            overflow: hidden;
-        }
-        .left-control, .main-screen{
-            display: block;
-            float: left;
-            height: 100%;
-            -webkit-transition: width .5s;
-            -moz-transition: width .5s;
-            -ms-transition: width .5s;
-            -o-transition: width .5s;
-            transition: width .5s;
-            margin:0;
-            padding: 0;
-            overflow: hidden;
-        }
-        .main-screen{
-            overflow: auto;
-        }
-        .credential, .client-control{
-            height:60%;
-            border-bottom: 1px solid #666;
-            padding:10px 20px;
-            overflow: auto;
-        }
-        .client-control{
-            height:40%;
-            border:none;
-        }
-        .credential h4, .client-control h4{
-            margin-bottom: 20px;
-        }
-        #demo div{
-            margin: 20px 10px;
-        }
+    .demo{
+        margin:0 auto;
+        background: white;
+        width:500px;
+        height:800px;
+        border:2px solid black;
+        overflow:auto;
+    }
+    .box{
+      text-align: center;
+      width:1200px;
+      margin:0 auto;
+    }
+      .div1 {
+        margin:0 auto;
+        text-align: center;
+        width:400px;
+        height:800px;
+        border:2px solid black;
+      float:left;
+    }
+    .input{
+      width:300px;
+      height:50px;
+      border:2px solid blue;
+    }
+    .btn1{
+      width:300px;
+      height:50px;
+    }
+    .btn2{
+      width:300px;
+      height:50px;
+    }
+    .btn3{
+      width:200px;
+      height:30px;
+    }
+    input[type='text']{
+      width:250px;
+      height:40px;
+      padding:0 5px;
+      border:1px solid #6699cc;
+    }
 
     </style>
+
+    <script type="text/javascript">
+    $(function(){
+      $("button:button").click(function() {
+        var reg = /^[0-9]*[1-9][0-9]*$/;
+       if(!reg.test($("input:text").val()))
+       alert("Please import a positive integer");
+    });
+    })
+    </script>
 </head>
 <body>
-    <div class="pos-f-t">
-        <nav class="navbar navbar-dark bg-dark">
-            <button onclick="toggle()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </nav>
-    </div>
-    <div class="main">
-        <span style="width: 30%;" class="left-control bg-light">
-            <div class="credential">
-                <h4>DB2 Credential</h4>
-                <form name="db2credential">
-                   <div class="row form-group">
-                        <div class="col-7">
-                          <input type="text" class="form-control" placeholder="Host name">
-                        </div>
-                        <div class="col-5">
-                          <input type="number" class="form-control" placeholder="Port">
-                        </div>
-                    </div>
-                  <div class="form-group">
-                    <input type="text" class="form-control" id="dbname" aria-describedby="emailHelp" placeholder="DB name ">
-                  </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Test connection</button>
-                </form>
-            </div>
-            <div class="client-control">
-                <h4>Client config</h4>
-                <form name="db2credential">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="clientnumber" aria-describedby="emailHelp" placeholder="Enter clients number">
-                  </div>
-                  <button type="button" onclick="start()" class="btn btn-primary">START</button>
-                  <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
-                </form>
-            </div>
-        </span>
-        <span style="width: 70%;" id="demo" class="main-screen bg-secondary">
-
-        </span>
-    </div>
+  <div class="box">
+<h1 >db2nodejs_project</h1>
+<div class="div1">
+  <br/><br/><br/><br/><br/><br/>
+<input type="text"/>
+  <br/><br/><br/>
+  <button type="button" onclick="start()" class="btn1">start</button>
+  <br/><br/><br/>
+  <button onclick="start()" class="btn2">stop</button>
+</div>
+<div id="demo" class="demo"></div>
+</div>
 <script>
-    var i = 1;
-    var socket = io();
-    var shops = {};
-    var bgColor = ["alert-success", "alert-info", "alert-warning", "alert-danger"];
-    socket.on('connect', function () {
-
-    });
-
-    function buildRetailer(num){
-        document.getElementById('demo').innerHTML = "";
-        shops = {};
-        for(var i=1;i<=parseInt(num);i++){
-            var shop = '<div id="shop'+i+'" class="alert '+bgColor[i%4]+'">Building</div>';
-            document.getElementById('demo').innerHTML += shop;
-            shops['shop'+i] = [];
-        }
-    }
-
-    function handleRetailer(num, user, verb){
-        var key = "shop"+num;
-        var shop = document.getElementById(key);
-        if(shop) {
-            if (user == "OPEN" && verb == "OPEN") {
-                shop.innerHTML = "OPEN!!!";
-            }
-            else if (user == "CLOSE" && verb == "CLOSE") {
-                shop.innerHTML = "CLOSED!!!";
-            }
-            else {
-                var retailer = shops[key]
-                var inn = "";var j = -1;
-                for(var i = 0;i < retailer.length;i++){
-                    var br = i==(retailer.length-1)?"":'<br/>';
-                    if(retailer[i].name==user){
-                        inn += user + ' ' + verb + br;
-                        j = i;
-                    }
-                    else inn += retailer[i].name + ' ' + retailer[i].verb + br;
-                }
-                if(j==-1){
-                    var br = retailer.length==0?"":'<br/>';
-                    inn += br + user + ' ' + verb;
-                    retailer.push({name:user,verb:verb});
-                }
-                shop.innerHTML = inn;
-                if(verb=="signs out")
-                    retailer.splice(j,1);
-            }
-        }
-    }
-
     function start(){
-        var reg = /^[0-9]*[1-9][0-9]*$/;
-        var num = document.getElementById("clientnumber").value;
-        if(!reg.test(num)){
-            alert("Please enter a digit number");
-            return ;
-        }
-
-        socket.emit('start', num);
-        buildRetailer(num);
-        socket.on('msg', function (clientNum, user, verb) {
-            handleRetailer(clientNum, user, verb);
+        var socket = io();
+        socket.on('connect', function () {
+            socket.emit('start', "haha");
         });
-    }
-    function stop(){
-        socket.emit('stop','haha');
-    }
-    function toggle() {
-        var width = document.querySelector('.left-control').style.width;
-        var width1 = '30%'; var width2 = '70%';
-        if(parseInt(width)==30){
-            width1 = '0%';
-            width2 = '100%';
-        }
-        document.querySelector('.left-control').style.width = width1;
-        document.querySelector('.main-screen').style.width = width2;
+        socket.on('msg', function (msg) {
+            var message = '<p>'+msg+'</p>';
+            var ih = document.getElementById('demo').innerHTML;
+            document.getElementById('demo').innerHTML = ih + message;
+        });
     }
 </script>
 
