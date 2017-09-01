@@ -19,6 +19,7 @@ app.set('view engine', 'hbs');
 // 创建socket服务
 var socketIO = IO(server);
 var socketList = {};
+var userNum = {};
 var usersCredList = new usersCred();
 var dbCredList = usersCredList.read();
 
@@ -29,10 +30,13 @@ socketIO.on('connection', function (socket) {
     console.log(socket.request.headers.referer);
     var splited = url.split('/');
     var userID = splited[splited.length - 1];
+    if(!userNum[userID]) userNum[userID] = 1;
+    else userNum[userID]++;
+    var newUserID = userID + userNum[userID];
 
     socket.on('start', function (params) {
 
-        socket.join(userID);    // 加入房间
+        socket.join(newUserID);    // 加入房间
         // 通知房间内人员
         var num = parseInt(params.num);
         delete params.num;
@@ -44,33 +48,35 @@ socketIO.on('connection', function (socket) {
         var db_cre = new populate(cred);
         if(db_cre.test()==1) {
             if(db_cre.testData()==1) {
-                if (!socketList[userID]) socketList[userID] = new product(num, socketIO, userID, 'msg');
-                socketList[userID].start();
+                if (!socketList[newUserID]) {
+                    socketList[newUserID] = new product(num, socketIO, newUserID, 'msg');
+                }
+                socketList[newUserID].start();
             }
-            else socketIO.to(userID).emit('sys', 'nodata');
+            else socketIO.to(newUserID).emit('sys', 'nodata');
         }
         else{
-            socketIO.to(userID).emit('sys', 'nocred');
+            socketIO.to(newUserID).emit('sys', 'nocred');
         }
     });
 
     socket.on('stop', function () {
-        if(socketList[userID]) {
-            socketList[userID].stop();
-            delete socketList[userID];
+        if(socketList[newUserID]) {
+            socketList[newUserID].stop();
+            delete socketList[newUserID];
         }
     });
 
     socket.on('disconnect', function (userName) {
 
-        if(socketList[userID]) {
-            socketList[userID].stop();
-            delete socketList[userID];
+        if(socketList[newUserID]) {
+            socketList[newUserID].stop();
+            delete socketList[newUserID];
         }
-        socket.leave(userID);
+        socket.leave(newUserID);
         // 通知房间内人员
-        socketIO.to(userID).emit('sys', userID + '退出了房间');
-        console.log(userID + '加入了');
+        socketIO.to(newUserID).emit('sys', userID + '退出了房间');
+        console.log(userID + '加入了退出了房间');
     });
 
     // 接收用户消息,发送相应的房间

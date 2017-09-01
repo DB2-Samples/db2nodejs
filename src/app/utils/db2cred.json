@@ -1,1 +1,1 @@
-{"larry":{"hostname":"9.30.147.53","port":"50000","db":"WEBSTORE","username":"db2inst1","password":"n1cetest"},"wangyu":{"hostname":"9.30.147.53","port":"50000","db":"WEBSTORE","username":"db2inst1","password":"n1cetest","userid":"wangyu"}}
+{"larry":{"hostname":"9.30.147.53","port":"50000","db":"WEBSTORE","username":"db2inst1","password":"n1cetest","userid":"larry"},"wangyu":{"hostname":"9.30.147.53","port":"50000","db":"WEBSTORE","username":"db2inst1","password":"n1cetest","userid":"wangyu"}}
