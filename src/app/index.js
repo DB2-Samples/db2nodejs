@@ -6,6 +6,7 @@ var router = express.Router();
 var demo = require("./utils/index").demo;
 var product = require("./utils/index").product;
 var populate = require("./utils/populate").populate;
+var usersCred = new require('./utils/user_cred').users;
 
 var app = express();
 var server = require('http').Server(app);
@@ -18,7 +19,8 @@ app.set('view engine', 'hbs');
 // 创建socket服务
 var socketIO = IO(server);
 var socketList = {};
-var dbCredList = {};
+var usersCredList = new usersCred();
+var dbCredList = usersCredList.read();
 
 socketIO.on('connection', function (socket) {
     // 获取请求建立socket连接的url
@@ -35,6 +37,8 @@ socketIO.on('connection', function (socket) {
         var num = parseInt(params.num);
         delete params.num;
         var cred = params;
+        dbCredList[userID] = cred;
+        usersCredList.write(dbCredList);
 
         console.log(userID + '加入了');
         var db_cre = new populate(cred);
@@ -88,38 +92,90 @@ router.get('/:userID', function (req, res) {
     else if(userID=='upload'){
         var querys = req._parsedOriginalUrl.query.split("&");
         let db_oper = {};
-        let pop;
         querys.forEach((stat) => {
             let prop = stat.split('=');
             db_oper[prop[0]] = prop[1];
         });
+        let pop;
+        let userid = db_oper.userid;
+        delete db_oper.userid;
         if(db_oper.cmd=='test'){
+            let result = {
+                severity: "error",
+                title: "FAILED!",
+                body: "Failed to connect to the database."
+            }
             delete db_oper.cmd;
-            pop = new populate(db_oper);
-            if(pop.test()==1)
-                res.send("{\"result\":\"success\"}");
-            else res.send("{\"result\":\"fail\"}");
+            console.log(db_oper);
+            dbCredList[userid] = db_oper;
+            usersCredList.write(dbCredList);
+            if(!pop) pop = new populate(db_oper);
+            if(pop.test()==1) {
+                result = {
+                    severity: "success",
+                    title: "SUCCESS!",
+                    body: "Successfully connect to the database."
+                }
+            }
+            res.send(JSON.stringify(result));
         }
         else if(db_oper.cmd=='load'){
+            let result = {
+                severity: "error",
+                title: "FAILED!",
+                body: "Failed to load the mock data."
+            }
             delete db_oper.cmd;
-            pop = new populate(db_oper);
+            dbCredList[userid] = db_oper;
+            usersCredList.write(dbCredList);
+            if(!pop) pop = new populate(db_oper);
             if(pop.test()==1) {
                 if(pop.testData()==1){
-                    res.send("{\"result\":\"exist\"}");
+                    result = {
+                        severity: "info",
+                        title: "ALREADY EXISTS!",
+                        body: "There's already mock data in the certain db table."
+                    }
                 }
                 else {
                     pop.load();
-                    res.send("{\"result\":\"success\"}");
+                    result = {
+                        severity: "success",
+                        title: "SUCCESS!",
+                        body: "Successfully load the mock data."
+                    }
                 }
-            }else{
-                res.send("{\"result\":\"fail\"}");
             }
+            res.send(JSON.stringify(result));
+        }
+        else if(db_oper.cmd=='clear'){
+            let result = {
+                severity: "error",
+                title: "FAILED!",
+                body: "Failed to clear the table data."
+            };
+            delete db_oper.cmd;
+            dbCredList[userid] = db_oper;
+            usersCredList.write(dbCredList);
+            if(!pop) pop = new populate(db_oper);
+            if(pop.test()==1) {
+                if(pop.delete()==1){
+                    result = {
+                        severity: "success",
+                        title: "SUCCESS!",
+                        body: "Successfully clear the table data."
+                    }
+                }
+            }
+            res.send(JSON.stringify(result));
         }
     }
 
     else {
+        let {hostname, port, db, username, password} = dbCredList[userID]||{hostname:"", port:"", db:"", username:"", password:""}
         res.render('index_bck', {
-            userID: userID
+            userID: userID,
+            hostname, port, db, username, password
         });
     }
 });

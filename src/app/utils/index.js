@@ -185,7 +185,6 @@ function Demo(num, socket, id, cmd, stop, cred) {
                             // In this case we want to use the customer service connection pool
                             customerServicePool.open(connString, (err, conn) => {
                                 if (err) {
-                                    console.log(err);
                                     socket.to(id).emit(cmd, err);
                                     return;
                                 }
@@ -212,10 +211,8 @@ function Demo(num, socket, id, cmd, stop, cred) {
 
                                 }
                                 catch (err) { // Alert if there are no orders for this customer
-                                    console.log(err);
                                     socket.to(id).emit(cmd, k, UserName, 'didn\' make an order.');
                                     socket.to(id).emit(cmd, k, UserName, 'signs out');
-                                    console.log('SILLY ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'HAS NO ORDERS TO UPDATE!!');
                                     conn.close();
                                 }
                                 conn.close();

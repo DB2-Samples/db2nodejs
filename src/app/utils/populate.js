@@ -45,28 +45,6 @@ let sc = salutations.length;
 var loadData = (pool, cred, callback) => {
 	var i = 0;
 	var connString = "DATABASE=" + cred.db + ";UID=" + cred.username + ";PWD=" + cred.password + ";HOSTNAME=" + cred.hostname + ";port=" + cred.port;
-	pool.open(connString, (err, conn) => {
-		if (err) {
-			console.log(err);
-			return;
-		}
-		//Get user info:
-		var sql = "DELETE FROM \"WEBSTORE\".\"CUSTOMER\"";
-		conn.querySync(sql);
-		conn.close();
-		console.log("CLEAN CUSTOMERS");
-	});
-	pool.open(connString, (err, conn) => {
-		if (err) {
-			console.log(err);
-			return;
-		}
-		//Get user info:
-		var sql = "DELETE FROM \"WEBSTORE\".\"INVENTORY\"";
-		conn.querySync(sql);
-		conn.close();
-		console.log("CLEAN INVENTORY");
-	});
 	async.whilst(() => {
 		return i < 100
 	}, (next) => {
@@ -166,12 +144,34 @@ var testData = (pool, cred) => {
 	return exist;
 }
 
+var deleteData = (pool, cred) => {
+	let success = 0;
+	var connString = "DATABASE=" + cred.db + ";UID=" + cred.username + ";PWD=" + cred.password + ";HOSTNAME=" + cred.hostname + ";port=" + cred.port;
+	pool.open(connString, (err, conn) => {
+		if (err) {
+			console.log(err);
+			return;
+		}
+		//Get user info:
+		var sql = "DELETE FROM \"WEBSTORE\".\"CUSTOMER\"";
+		conn.querySync(sql);
+		sql = "DELETE FROM \"WEBSTORE\".\"INVENTORY\"";
+		conn.querySync(sql);
+		console.log("CLEAN INVENTORY");
+		console.log("CLEAN CUSTOMERS");
+		conn.close();
+		success = 1;
+	});
+	return success;
+}
+
 function populate(cred, callBack) {
 	this.cred = cred;
 	this.pool = Initialize(cred);
 	this.test = () => testDataExist(this.pool, this.cred);
 	this.testData = () => testData(this.pool, this.cred);
 	this.load = () => loadData(this.pool, this.cred, this.callBack);
+	this.delete = () => deleteData(this.pool, this.cred);
 	this.callBack = callBack;
 }
 
