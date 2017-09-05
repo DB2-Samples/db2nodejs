@@ -16,7 +16,13 @@ app.set('view engine', 'hbs');
 // app.set('view engine', 'hbs');
 
 
-app.get('/')
+//GET home page.
+// router.get('/',function (req,res){
+//     console.log(req.params.password);
+//     if(req.params.password!=''){
+//     res.json({password:123456});
+//   }
+// });
 
 
 
@@ -24,6 +30,11 @@ app.get('/')
 var socketIO = IO(server);
 var socketList = {};
 var dbCredList = {};
+
+var userAuth = {};
+const usrPwd = {
+  "larry":"passw0rd"
+}
 
 socketIO.on('connection', function (socket) {
     // 获取请求建立socket连接的url
@@ -68,6 +79,10 @@ socketIO.on('connection', function (socket) {
             socketList[userID].stop();
             delete socketList[userID];
         }
+
+        if(userAuth[userID]) {
+          delete userAuth[userID];
+        }
         socket.leave(userID);
         // 通知房间内人员
         socketIO.to(userID).emit('sys', userID + '退出了房间');
@@ -83,49 +98,64 @@ router.get('/:userID', function (req, res) {
     var userID = req.params.userID;
     console.log(userID);
 
-    if(userID=="submit_Form"){
-        var user = req.query.username;
-        res.render('index_bck', {
-            userID: user
-        });
-    }
-    // 渲染页面数据(见views/room.hbs)
-    else if(userID=='upload'){
-        var querys = req._parsedOriginalUrl.query.split("&");
-        let db_oper = {};
-        let pop;
-        querys.forEach((stat) => {
-            let prop = stat.split('=');
-            db_oper[prop[0]] = prop[1];
-        });
-        if(db_oper.cmd=='test'){
-            delete db_oper.cmd;
-            pop = new populate(db_oper);
-            if(pop.test()==1)
-                res.send("{\"result\":\"success\"}");
-            else res.send("{\"result\":\"fail\"}");
-        }
-        else if(db_oper.cmd=='load'){
-            delete db_oper.cmd;
-            pop = new populate(db_oper);
-            if(pop.test()==1) {
-                if(pop.testData()==1){
-                    res.send("{\"result\":\"exist\"}");
-                }
-                else {
-                    pop.load();
-                    res.send("{\"result\":\"success\"}");
-                }
-            }else{
-                res.send("{\"result\":\"fail\"}");
-            }
-        }
-    }
+    if(userAuth[userID]){
 
-    else {
-        res.render('index_bck', {
-            userID: userID
-        });
+    // 渲染页面数据(见views/room.hbs)
+      if(userID=='upload'){
+          var querys = req._parsedOriginalUrl.query.split("&");
+          let db_oper = {};
+          let pop;
+          querys.forEach((stat) => {
+              let prop = stat.split('=');
+              db_oper[prop[0]] = prop[1];
+          });
+          if(db_oper.cmd=='test'){
+              delete db_oper.cmd;
+              pop = new populate(db_oper);
+              if(pop.test()==1)
+                  res.send("{\"result\":\"success\"}");
+              else res.send("{\"result\":\"fail\"}");
+          }
+          else if(db_oper.cmd=='load'){
+              delete db_oper.cmd;
+              pop = new populate(db_oper);
+              if(pop.test()==1) {
+                  if(pop.testData()==1){
+                      res.send("{\"result\":\"exist\"}");
+                  }
+                  else {
+                      pop.load();
+                      res.send("{\"result\":\"success\"}");
+                  }
+              }else{
+                  res.send("{\"result\":\"fail\"}");
+              }
+          }
+      }
+
+      else {
+          res.render('index_bck', {
+              userID: userID
+          });
+      }
+    }
+    else{
+        if(userID=='login'){
+          var querys = req._parsedOriginalUrl.query.split("&");
+          let params = {};
+          querys.forEach((item)=>{
+              params[item.split('=')[0]] = item.split('=')[1];
+          });
+          if(usrPwd[params.username] && usrPwd[params.username]==params.password){
+              userAuth[params.username] = true;
+              res.send("{\"result\":\"success\",\"user\":\""+params.username+"\"}");
+          }
+          else{
+            res.end("{\"result\":\"unknown user\"}");
+          }
+          console.log(req._parsedOriginalUrl.query);
+      }
+      else res.end('unauthorized user');
     }
 });
 
@@ -133,4 +163,5 @@ console.log(__dirname);
 app.use('/', router);
 server.listen(8888, function () {
     console.log('server listening on port 8888');
+  //  console.log("information: "+str.toString());
 });
