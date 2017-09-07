@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 var express = require('express');
 var path = require('path');
 var IO = require('socket.io');
@@ -111,7 +111,6 @@ router.get('/:userID', function (req, res) {
     if(userAuth[userID]){
 
     // 渲染页面数据(见views/room.hbs)
-<<<<<<< HEAD
       if(userID=='upload'){
           var querys = req._parsedOriginalUrl.query.split("&");
           let db_oper = {};
@@ -167,7 +166,6 @@ router.get('/:userID', function (req, res) {
           console.log(req._parsedOriginalUrl.query);
       }
       else res.end('unauthorized user');
-=======
     else if(userID=='upload'){
         var querys = req._parsedOriginalUrl.query.split("&");
         let db_oper = {};
@@ -258,7 +256,6 @@ router.get('/:userID', function (req, res) {
             userID: userID,
             hostname, port, db, username, password
         });
->>>>>>> origin/master
     }
 });
 
