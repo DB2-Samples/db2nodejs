@@ -1,8 +1,10 @@
-<html>
+﻿<html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>Project X</title>
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap.min.css">
+    <script src="build/jquery.min.js"></script>
+    <script type="text/javascript" src="build/login.js"></script>
     <style>
         body{
             width:100%;
@@ -61,7 +63,8 @@
             width:100%;
             height:100%;
         }
-        .footer{
+        .foot
+        er{
             width:100%;
             height:23%;
             position: absolute;
@@ -69,26 +72,164 @@
             background-color: #325c80;
             opacity: 0.9;
         }
-
+        .header{
+          border-bottom:none;
+          height:50px;
+          positive:relative;
+        }
+        .header .switch{
+          left:70px;
+          margin-top: -100px
+        }
+        .header .switch{
+          font-size: 16px;
+          height:45px;
+          left:60px;
+          position: absolute;
+        }
+        .header .switch #switch_qlogin {
+          margin-right: 85px;
+        }
+        .header .switch .switch_btn_focus {
+          color:white;
+          display: inline-block;
+          height: 45px;
+          line-height: 45px;
+          outline: medium none;
+        }
+        a {
+          text-decoration: none;
+        }
+        .header .switch .switch_btn {
+          color: white;
+          display: inline-block;
+          height: 45px;
+          line-height: 45px;
+          outline: medium none;
+        }
+        a {
+          text-decoration: none;
+        }
+        element.style {
+          left: 0;
+          position: absolute;
+          width: 70px;
+        }
+        #switch_bottom {
+          border-bottom: 2px solid white;
+          bottom: -1px;
+          position: absolute;
+        }
+        .web_login{
+          margin-top: 200px;
+          padding-bottom: 20px;
+          positive:relative;
+          width:400px
+        }
+        .web_login
+        .web_form{
+          margin:0 auto;
+          width:300px;
+        }
+        ul{
+          padding:0;
+        }
+        .reg_form li{
+          height:55px;
+        }
+        ul li{
+          list-style-type:none;
+        }
+        .web_login .inputOuter2 {
+          float: left;
+          margin-top: 6px;
+          width: auto;
+        }
+        .web_login .inputstyle2 {
+          border-radius: 2px;
+          width: auto;
+        }
+        a.zcxy {
+          color: white;
+          line-height: 58px;
+          margin-left: 15px;
+          text-decoration: underline;
+        }
     </style>
+
+
 </head>
 <body>
-    <div class="blur">
-    </div>
+    <div class="blur"></div>
     <div class="main">
         <div class="input">
-            <div class="logo"><img  src="source/duola-a-meng_24.png"/></div>
-            <p>Please enter your user name</p>
-            <div class="form-group">
-                <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="User name.">
-                <button onclick="login()" class="btn login btn-primary" type="button">
+
+          <div class="header">
+            <div id="switch" class="switch">
+              <a id="switch_qlogin" class="switch_btn_focus" href="javascript:void(0)" >Login</a>
+              <a id="switch_login" class="switch_btn" href="javascript:void(0)" >Register</a>
+              <div id="switch_bottom" class="switch_bottom" style="position: absolute; width: 80px; left: 0px;"></div>
+            </div>
+          </div>
+          <div id="web_qr_login" class="web_qr_login" style="display: block; height:auto;">
+          <form>
+            <input name="did" value="0" type="hidden">
+            <input name="to" value="log" type="hidden">
+            <div class="form-group" >
+                <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="User name." style="width:230px;margin-left:45px">
+                <br/>
+                <input type="password" class="form-control" name="password" id="password"  placeholder="Password." style="width:230px;margin-left:45px">
+                <button class="btn login btn-primary" id="btn" type="button" style="width:230px;margin-left:45px">
                     Sign in
                 </button>
             </div>
+          </form>
         </div>
+        <div id="qlogin" class="qlogin" style="display:none">
+          <div class="web_login" >
+            <form id="regUser" name="form2" action="#" method="post" style="margin-top:-260px;margin-left:50px">
+
+              <input name="to" value="reg" type="hidden">
+              <input name="did" value="0" type="hidden">
+              <ul id="reg-ul" class="reg_form">
+                <li>
+                  <div class="inputOuter2">
+                    <input id="user" class="form-control" name="user" maxlength="16" type="text" placeholder="User name.">
+                  </div>
+                </li>
+                <li>
+                  <div class="inputOuter2">
+                    <input id="passwd" class="form-control" name="passwd" maxlength="16" type="password" placeholder="Password.">
+                  </div>
+                </li>
+                <li>
+                  <div class="inputOuter2">
+                    <input id="passwd2" class="form-control" name="" maxlength="16" type="password" placeholder="Confirm pwd.">
+                  </div>
+                </li>
+
+                <li>
+                  <div class="inputArea">
+                    <input id="reg" class="btn login btn-primary" style="margin-top:10px;width:220px" value="Agree and register" type="button">
+                    <br/>
+                    <a class="zcxy" href="#" target="_blank">Registration Agreement</a>
+                  </div>
+                </li>
+                <div class="cl"></div>
+              </ul>
+            </form>
+
+          </div>
+        </div>
+      </div>
 
     </div>
+
+
+
     <div class="footer"></div>
+
+
 </body>
 <script>
     var stable = 4160 / 3120;
@@ -118,21 +259,54 @@
         window.onresize = resize;
         window.onload = load;
         document.getElementById('username').onkeydown = function(e){
-            if(e.which===13){
-                login();
+                  if(e.which===13){
+                      login();
+
             }
         }
     }
     init();
     function login(){
         var user = document.getElementById("username").value;
-        if(user&&/^[a-zA-Z]*$/g.test(user)){
+        var pwd = document.getElementById("password").value;
+        if((user&&/^[a-zA-Z]*$/g.test(user))){
             window.location.replace('/'+user);
         }
         else if(user){
-            alert('You can only input letters')
+            alert('Please input the correct username or password')
         }
         return false;
     }
+
 </script>
+<script type="text/javascript">
+   $("#btn").click(function(){
+       var params={
+         username:$("#username").val(),
+         password:$("#password").val()
+       };
+       $.ajax({
+                data: params,
+                url: '/login',
+                type:'get',
+                dataType: 'json',
+                success: function(data){
+
+                    console.log(data);
+                    if(data.result=="success"&&data.user){
+                      window.location.href = '/'+data.user;
+                    }
+                    else{
+                      alert('login failed')
+                    }
+
+                  },
+
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert('login failed');
+                }
+          });
+      });
+</script>
+
 </html>

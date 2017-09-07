@@ -1,0 +1,284 @@
+
+html {
+}
+body {
+    background: #fff url("../images/1.jpg") no-repeat scroll 50% 0;
+    font-family: "Microsoft Yahei";
+    font-size: 12px;
+    margin: 0;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+ul li {
+    list-style-type: none;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    color: #f00;
+    text-decoration: none;
+}
+.cl {
+    clear: both;
+}
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: medium none;
+}
+.login {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #eee #eee currentcolor;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 2px 2px medium;
+    margin: 0 auto;
+    position: relative;
+    width: 370px;
+}
+.header {
+    border-bottom: 1px solid #e2e2e2;
+    font-family: "Microsoft Yahei";
+    height: 50px;
+    position: relative;
+}
+.header .switch {
+    bottom: 0;
+    font-size: 16px;
+    height: 45px;
+    left: 60px;
+    position: absolute;
+}
+.header .switch #switch_qlogin {
+    margin-right: 85px;
+}
+.header .switch .switch_btn {
+    color: #999;
+    display: inline-block;
+    height: 45px;
+    line-height: 45px;
+    outline: medium none;
+}
+.header .switch .switch_btn_focus {
+    color: #333;
+    display: inline-block;
+    height: 45px;
+    line-height: 45px;
+    outline: medium none;
+}
+.header .switch .switch_btn:hover {
+    color: #333;
+    text-decoration: none;
+}
+.header .switch .switch_btn_focus:hover {
+    text-decoration: none;
+}
+#switch_bottom {
+    border-bottom: 2px solid #848484;
+    bottom: -1px;
+    position: absolute;
+}
+.web_login {
+    position: relative;
+    width: 370px;
+}
+#web_login {
+}
+.web_login .login_form {
+    margin: 0 auto;
+    width: 272px;
+}
+.web_login .reg_form {
+    margin: 0 auto;
+    width: 300px;
+}
+.web_login .input-tips {
+    float: left;
+    font-family: "Hiragino Sans GB","Microsoft Yahei";
+    font-size: 16px;
+    height: 42px;
+    line-height: 42px;
+    margin-top: 10px;
+    width: 50px;
+}
+.web_login .input-tips2 {
+    clear: both;
+    float: left;
+    font-family: "Hiragino Sans GB","Microsoft Yahei";
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+    padding-right: 10px;
+    text-align: right;
+    width: 75px;
+}
+.web_login .inputOuter {
+    float: left;
+    height: 42px;
+    margin-top: 10px;
+    width: 200px;
+}
+.web_login .inputOuter2 {
+    float: left;
+    margin-top: 6px;
+    width: 200px;
+}
+.web_login .inputstyle {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d7d7d7;
+    border-radius: 2px;
+    color: #333;
+    font-family: Verdana,Tahoma,Arial;
+    font-size: 16px;
+    height: 38px;
+    ime-mode: disabled;
+    line-height: 38px;
+    padding-left: 5px;
+    width: 200px;
+}
+.web_login input.inputstyle2:focus, .web_login input.inputstyle:focus {
+    border: 1px solid #198bd4;
+    box-shadow: 0 0 2px #198bd4;
+}
+.web_login .inputstyle2 {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d7d7d7;
+    border-radius: 2px;
+    color: #333;
+    font-family: Verdana,Tahoma,Arial;
+    font-size: 16px;
+    height: 34px;
+    ime-mode: disabled;
+    line-height: 34px;
+    padding-left: 5px;
+    width: 200px;
+}
+.web_login .uinArea {
+    height: 55px;
+    position: relative;
+    z-index: 10;
+}
+.web_login .pwdArea {
+    height: 55px;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 3;
+}
+.web_qr_login {
+    overflow: hidden;
+    position: relative;
+}
+.cue {
+    border: 1px solid #cccccc;
+    font-family: "Hiragino Sans GB","Microsoft Yahei";
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    text-align: center;
+}
+.login {
+    background-color: #ffffff;
+}
+h1 {
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+    margin: 80px auto 50px -25px;
+    text-align: center;
+    text-shadow: 0 1px 1px #555;
+}
+h1 sup {
+    font-size: 18px;
+    font-style: normal;
+    margin-left: 10px;
+    position: absolute;
+}
+.login {
+    background: #fff none repeat scroll 0 0;
+    border: 0 none;
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+    padding: 5px 0;
+}
+.web_login {
+    padding-bottom: 20px;
+}
+.jianyi {
+    color: #b3b8c4;
+    margin-top: 25px;
+    text-align: center;
+}
+.reg_form li {
+    height: 55px;
+}
+.cue {
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+.web_login input.inputstyle2:focus, .web_login input.inputstyle:focus {
+    box-shadow: 0 0 0;
+}
+.web_login .reg_form {
+    margin: 0 auto;
+    width: 300px;
+}
+.web_login .inputstyle2 {
+    border-radius: 2px;
+    width: 210px;
+}
+.web_login .input-tips2 {
+    padding-right: 5px;
+    width: 80px;
+}
+.button_blue {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: #2795dc none repeat scroll 0 0;
+    border-color: currentcolor currentcolor #0078b3;
+    border-image: none;
+    border-radius: 4px;
+    border-style: none none solid;
+    border-width: medium medium 3px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    font-family: "Microsoft Yahei",Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    height: 41px;
+    outline: medium none;
+    padding: 0 10px;
+    text-align: center;
+}
+input.button_blue:hover {
+    background: #0081c1 none repeat scroll 0 0;
+    border-bottom: 3px solid #006698;
+    color: #fff;
+    text-decoration: none;
+}
+a.zcxy {
+    color: #959ca8;
+    line-height: 58px;
+    margin-left: 15px;
+    text-decoration: underline;
+}
+.web_login .login_form {
+    margin-top: 30px;
+}
+.web_login .uinArea {
+    height: 60px;
+}
+.header .switch {
+    left: 70px;
+}
