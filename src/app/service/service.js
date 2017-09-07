@@ -1,5 +1,6 @@
 function LoadData(msgContainer){
     this.load = function(params){
+        var user = location.pathname;
         var progress = $('#progressBar')[0];
         var progressdiv = $('#progressBar div')[0];
         progress.style.display="block";
@@ -7,7 +8,7 @@ function LoadData(msgContainer){
         var that = this;
         $.ajax({
             type: 'get',
-            url: '/upload',
+            url: user+'/upload',
             data: params,
             dataType: 'json',
             success: function (data) {

@@ -48,7 +48,11 @@ socketIO.on('connection', function (socket) {
     var userID = splited[splited.length - 1];
     if(!userNum[userID]) userNum[userID] = 1;
     else userNum[userID]++;
+
+    userAuth[userID]++;
+
     var newUserID = userID + userNum[userID];
+    console.log(newUserID);
 
     socket.on('start', function (params) {
 
@@ -59,7 +63,6 @@ socketIO.on('connection', function (socket) {
         var cred = params;
         dbCredList[userID] = cred;
         usersCredList.write(dbCredList);
-
         console.log(userID + '加入了');
         var db_cre = new populate(cred);
         if(db_cre.test()==1) {
@@ -90,7 +93,7 @@ socketIO.on('connection', function (socket) {
             delete socketList[newUserID];
         }
         userAuth[userID]--;
-        if(userAuth[userID]==0) {
+        if(userAuth[userID]==1) {
             delete userAuth[userID];
         }
         socket.leave(newUserID);
@@ -105,14 +108,11 @@ socketIO.on('connection', function (socket) {
     });
 
 });
-router.get('/:userID', function (req, res) {
-    var userID = req.params.userID;
-    console.log(userID);
-
-    if(userAuth[userID]) {
-
-        // 渲染页面数据(见views/room.hbs)
-        if (userID == 'upload') {
+router.get('/:userID/:path', function(req, res){
+    var user = req.params.userID;
+    var path = req.params.path;
+    if(userAuth[user]>0){
+        if(path == 'upload'){
             var querys = req._parsedOriginalUrl.query.split("&");
             let db_oper = {};
             querys.forEach((stat) => {
@@ -193,16 +193,22 @@ router.get('/:userID', function (req, res) {
                 res.send(JSON.stringify(result));
             }
         }
-
-        else {
-            let cred = {hostname: "", port: "", db: "", username: "", password: ""};
-            if (dbCredList[userID]) cred = dbCredList[userID]
-            let hostname = cred.hostname, port = cred.port, db = cred.db, username = cred.username, password = cred.password;
-            res.render('index_bck', {
-                userID: userID,
-                hostname, port, db, username, password
-            });
-        }
+    }
+    else {
+        res.location('index.html');
+        res.send(302);
+    }
+});
+router.get('/:userID', function (req, res) {
+    var userID = req.params.userID;
+    if(userAuth[userID]>0) {
+        let cred = {hostname: "", port: "", db: "", username: "", password: ""};
+        if (dbCredList[userID]) cred = dbCredList[userID]
+        let hostname = cred.hostname, port = cred.port, db = cred.db, username = cred.username, password = cred.password;
+        res.render('index_bck', {
+            userID: userID,
+            hostname, port, db, username, password
+        });
     }
     else{
         if(userID=='login'){
@@ -212,7 +218,7 @@ router.get('/:userID', function (req, res) {
               params[item.split('=')[0]] = item.split('=')[1];
           });
           if(usrPwd[params.username] && usrPwd[params.username]==params.password){
-              userAuth[params.username] = true;
+              if(!userAuth[params.username])userAuth[params.username] = 1;
               res.send("{\"result\":\"success\",\"user\":\""+params.username+"\"}");
           }
           else{
@@ -220,7 +226,10 @@ router.get('/:userID', function (req, res) {
           }
           console.log(req._parsedOriginalUrl.query);
       }
-      else res.end('unauthorized user');
+      else{
+        res.location('index.html');
+        res.send(302);
+      }
     }
 });
 
