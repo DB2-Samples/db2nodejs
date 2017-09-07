@@ -211,24 +211,39 @@ router.get('/:userID', function (req, res) {
     }
     else{
         if(userID=='login'){
-          var querys = req._parsedOriginalUrl.query.split("&");
-          let params = {};
-          querys.forEach((item)=>{
-              params[item.split('=')[0]] = item.split('=')[1];
-          });
-          if(usrPwd[params.username] && usrPwd[params.username]==params.password){
-              if(!userAuth[params.username])userAuth[params.username] = 1;
-              res.send("{\"result\":\"success\",\"user\":\""+params.username+"\"}");
-          }
-          else{
-            res.end("{\"result\":\"unknown user\"}");
-          }
-          console.log(req._parsedOriginalUrl.query);
-      }
-      else{
-        res.location('index.html');
-        res.send(302);
-      }
+            var querys = req._parsedOriginalUrl.query.split("&");
+            let params = {};
+            querys.forEach((item)=>{
+                params[item.split('=')[0]] = item.split('=')[1];
+            });
+            if(usrPwd[params.username] && usrPwd[params.username]==params.password){
+                if(!userAuth[params.username])userAuth[params.username] = 1;
+                res.send("{\"result\":\"success\",\"user\":\""+params.username+"\"}");
+            }
+            else{
+                res.end("{\"result\":\"unknown user\"}");
+            }
+            console.log(req._parsedOriginalUrl.query);
+        }
+        else if(userID=='signup'){
+            var querys = req._parsedOriginalUrl.query.split("&");
+            let params = {};
+            querys.forEach((item)=>{
+                params[item.split('=')[0]] = item.split('=')[1];
+            });
+            if(!usrPwd[params.username]){
+                usrPwd[params.username] = params.password;
+                userAuth[params.username] = 1;
+                res.send("{\"result\":\"success\",\"user\":\""+params.username+"\"}");
+            }
+            else{
+                res.end("{\"result\":\"existed user\"}");
+            }
+        }
+        else{
+            res.location('index.html');
+            res.send(302);
+        }
     }
 });
 

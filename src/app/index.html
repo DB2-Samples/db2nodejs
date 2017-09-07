@@ -37,14 +37,7 @@
             height:100%;
             top:50%;
             color: white;
-            padding: 140px 20px 40px;
-        }
-        .input .logo{
-            position: relative;
-            height:180px;
-            width:180px;
-            margin:auto auto;
-            margin-top: -80px;
+            padding: 40px 20px 40px;
         }
         .logo img{
             width:100%;
@@ -63,8 +56,7 @@
             width:100%;
             height:100%;
         }
-        .foot
-        er{
+        .footer{
             width:100%;
             height:23%;
             position: absolute;
@@ -73,87 +65,57 @@
             opacity: 0.9;
         }
         .header{
-          border-bottom:none;
-          height:50px;
-          positive:relative;
+            position:relative;
+            margin:0 auto;
+            width: 300px;
+            margin-bottom:20px;
         }
-        .header .switch{
-          left:70px;
-          margin-top: -100px
+        .header .switchNew{
+            width: 100%;
         }
-        .header .switch{
-          font-size: 16px;
-          height:45px;
-          left:60px;
-          position: absolute;
+        .header .switchNew span{
+            width: 50%;
+            display: inline-block;
+            line-height: 36px;
+            height:36px;
+            font-size: 20px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
         }
-        .header .switch #switch_qlogin {
-          margin-right: 85px;
+        .header .scroll{
+            position: absolute;
+            left: 0px;
+            width: 50%;
+            height:2px;
+            margin-top: -2px;
+            -webkit-transition: left .2s;
+            -moz-transition: left .2s;
+            -ms-transition: left .2s;
+            -o-transition: left .2s;
+            transition: left .2s;
         }
-        .header .switch .switch_btn_focus {
-          color:white;
-          display: inline-block;
-          height: 45px;
-          line-height: 45px;
-          outline: medium none;
+        .header .scroll .line{
+            width: 70%;
+            background: white;
+            margin:0 auto;
+            height:100%;
         }
-        a {
-          text-decoration: none;
+        .inputBody{
+            position: relative;
         }
-        .header .switch .switch_btn {
-          color: white;
-          display: inline-block;
-          height: 45px;
-          line-height: 45px;
-          outline: medium none;
+        .form-control{
+            width:230px;
+            margin: 20px auto;
+            display: block;
         }
-        a {
-          text-decoration: none;
+        .qlogin, .web_qr_login{
+            padding-top:10px;
+            width: 100%;
+            position: relative;
         }
-        element.style {
-          left: 0;
-          position: absolute;
-          width: 70px;
-        }
-        #switch_bottom {
-          border-bottom: 2px solid white;
-          bottom: -1px;
-          position: absolute;
-        }
-        .web_login{
-          margin-top: 200px;
-          padding-bottom: 20px;
-          positive:relative;
-          width:400px
-        }
-        .web_login
-        .web_form{
-          margin:0 auto;
-          width:300px;
-        }
-        ul{
-          padding:0;
-        }
-        .reg_form li{
-          height:55px;
-        }
-        ul li{
-          list-style-type:none;
-        }
-        .web_login .inputOuter2 {
-          float: left;
-          margin-top: 6px;
-          width: auto;
-        }
-        .web_login .inputstyle2 {
-          border-radius: 2px;
-          width: auto;
-        }
-        a.zcxy {
-          color: white;
-          line-height: 58px;
-          margin-left: 15px;
-          text-decoration: underline;
+        .web_qr_login{
+            padding-top:60px;
         }
     </style>
 
@@ -163,66 +125,39 @@
     <div class="blur"></div>
     <div class="main">
         <div class="input">
-
-          <div class="header">
-            <div id="switch" class="switch">
-              <a id="switch_qlogin" class="switch_btn_focus" href="javascript:void(0)" >Login</a>
-              <a id="switch_login" class="switch_btn" href="javascript:void(0)" >Register</a>
+            <div class="header">
+            <!--<div style="display: none" id="switch" class="switch">
+              <a id="switch_qlogin" class="switch_btn_focus" href="javascript:void(0)" >Sign In</a>
+              <a id="switch_login" class="switch_btn" href="javascript:void(0)" >Sign Up</a>
               <div id="switch_bottom" class="switch_bottom" style="position: absolute; width: 80px; left: 0px;"></div>
-            </div>
+            </div>-->
+
+              <div class="switchNew"><span onclick="switchToSignIn()">Sign In</span><span onclick="switchToSignUp()">Sign Up</span></div>
+              <div class="scroll"><div class="line"></div></div>
           </div>
-          <div id="web_qr_login" class="web_qr_login" style="display: block; height:auto;">
-          <form>
-            <input name="did" value="0" type="hidden">
-            <input name="to" value="log" type="hidden">
-            <div class="form-group" >
-                <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="User name." style="width:230px;margin-left:45px">
-                <br/>
-                <input type="password" class="form-control" name="password" id="password"  placeholder="Password." style="width:230px;margin-left:45px">
-                <button class="btn login btn-primary" id="btn" type="button" style="width:230px;margin-left:45px">
-                    Sign in
-                </button>
+            <div class="inputBody">
+                <div id="web_qr_login" class="web_qr_login" style="display: block;">
+                    <div class="form-group" >
+                        <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="User name." />
+                        <input type="password" class="form-control" name="password" id="password"  placeholder="Password." />
+                        <button class="btn login btn-primary form-control" id="btn" type="button">
+                            Sign in
+                        </button>
+                    </div>
+                </div>
+                <div id="qlogin" class="qlogin" style="display: none">
+
+                    <div class="form-group" >
+                        <input type="text" class="form-control" id="signupusername" aria-describedby="emailHelp" placeholder="User name.">
+                        <input type="password" class="form-control" id="signuppassword" placeholder="Password.">
+                        <input type="password" class="form-control" id="confirmpassword" placeholder="Confirm password.">
+                        <button onclick="signUp()" class="btn login btn-primary form-control" type="button">
+                            Sign up
+                        </button>
+                    </div>
+                </div>
             </div>
-          </form>
-        </div>
-        <div id="qlogin" class="qlogin" style="display:none">
-          <div class="web_login" >
-            <form id="regUser" name="form2" action="#" method="post" style="margin-top:-260px;margin-left:50px">
-
-              <input name="to" value="reg" type="hidden">
-              <input name="did" value="0" type="hidden">
-              <ul id="reg-ul" class="reg_form">
-                <li>
-                  <div class="inputOuter2">
-                    <input id="user" class="form-control" name="user" maxlength="16" type="text" placeholder="User name.">
-                  </div>
-                </li>
-                <li>
-                  <div class="inputOuter2">
-                    <input id="passwd" class="form-control" name="passwd" maxlength="16" type="password" placeholder="Password.">
-                  </div>
-                </li>
-                <li>
-                  <div class="inputOuter2">
-                    <input id="passwd2" class="form-control" name="" maxlength="16" type="password" placeholder="Confirm pwd.">
-                  </div>
-                </li>
-
-                <li>
-                  <div class="inputArea">
-                    <input id="reg" class="btn login btn-primary" style="margin-top:10px;width:220px" value="Agree and register" type="button">
-                    <br/>
-                    <a class="zcxy" href="#" target="_blank">Registration Agreement</a>
-                  </div>
-                </li>
-                <div class="cl"></div>
-              </ul>
-            </form>
-
-          </div>
-        </div>
       </div>
-
     </div>
 
 
@@ -258,55 +193,92 @@
     var init = function(){
         window.onresize = resize;
         window.onload = load;
-        document.getElementById('username').onkeydown = function(e){
-                  if(e.which===13){
-                      login();
-
+        var check = function(e){
+            if(e.which===13){
+                login();
             }
         }
+        $('#username').keydown(check);
+        $('#password').keydown(check);
+        $('#btn').click(login);
     }
     init();
-    function login(){
-        var user = document.getElementById("username").value;
-        var pwd = document.getElementById("password").value;
-        if((user&&/^[a-zA-Z]*$/g.test(user))){
-            window.location.replace('/'+user);
-        }
-        else if(user){
-            alert('Please input the correct username or password')
-        }
-        return false;
+
+    function switchToSignUp(){
+        $('.header .scroll')[0].style.left='50%';
+        $('#web_qr_login').css('display','none');
+        $('#qlogin').css('display','block');
     }
 
-</script>
-<script type="text/javascript">
-   $("#btn").click(function(){
-       var params={
-         username:$("#username").val(),
-         password:$("#password").val()
+    function switchToSignIn(){
+        $('.header .scroll')[0].style.left='0%';
+        $('#web_qr_login').css('display','block');
+        $('#qlogin').css('display','none');
+    }
+   function login() {
+       var params = {};
+       params = {
+           username: $("#username").val(),
+           password: $("#password").val()
        };
-       $.ajax({
-                data: params,
-                url: '/login',
-                type:'get',
-                dataType: 'json',
-                success: function(data){
+       if(params.username&&params.password) {
+           $.ajax({
+               data: params,
+               url: '/login',
+               type: 'get',
+               dataType: 'json',
+               success: function (data) {
 
-                    console.log(data);
-                    if(data.result=="success"&&data.user){
-                      window.location.href = '/'+data.user;
-                    }
-                    else{
-                      alert('login failed')
-                    }
+                   console.log(data);
+                   if (data.result == "success" && data.user) {
+                       window.location.href = '/' + data.user;
+                   }
+                   else {
+                       alert('login failed')
+                   }
 
-                  },
+               },
 
-                error: function(jqXHR, textStatus, errorThrown){
-                    alert('login failed');
-                }
-          });
-      });
+               error: function (jqXHR, textStatus, errorThrown) {
+                   alert('login failed');
+               }
+           });
+       }
+   }
+   function signUp() {
+       var params = {};
+       params = {
+           username: $("#signupusername").val(),
+           password: $("#signuppassword").val(),
+           vpwd:$('#confirmpassword').val()
+       };
+       if(params.username&&params.password&&params.password==params.vpwd){
+           var p = {
+               username: params.username,
+               password: params.password
+           }
+           $.ajax({
+               data: p,
+               url: '/signup',
+               type: 'get',
+               dataType: 'json',
+               success: function (data) {
+                   console.log(data);
+                   if (data.result == "success" && data.user) {
+                       window.location.href = '/' + data.user;
+                   }
+                   else {
+                       alert('sign up failed: '+data.result);
+                   }
+
+               },
+
+               error: function (jqXHR, textStatus, errorThrown) {
+                   alert('sign up failed');
+               }
+           });
+       }
+   }
 </script>
 
 </html>
