@@ -1,0 +1,331 @@
+[33mcommit 1444721ed086471ab9fc4fbf411225466134e665[m[33m ([m[1;36mHEAD -> [m[1;32mzjj[m[33m)[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Thu Sep 7 15:21:16 2017 +0800
+
+    commit
+
+[33mcommit 2c0a3260625636809548961ece33784e7ad57d6d[m
+Merge: a3876be 0a2c8c1
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Thu Sep 7 13:34:03 2017 +0800
+
+    resolve conflict
+
+[33mcommit a3876be8373072620bfbb0852e892624edbe10b7[m
+Merge: 9967228 6272f26
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Thu Sep 7 13:21:16 2017 +0800
+
+    Merge remote-tracking branch 'origin/test' into zjj
+
+[33mcommit 996722804b37b26cd5d7ba111fc74f3a11eaefde[m[33m ([m[1;31mlfyre/zjj[m[33m)[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Wed Sep 6 15:15:25 2017 +0800
+
+    submit
+
+[33mcommit c22eaa3badf96016b7b1b51e0d70dc9d6dd33f1a[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Tue Sep 5 17:00:30 2017 +0800
+
+    submit
+
+[33mcommit 0a2c8c19bbfbf384467f3fad3ffacae1df72b0cc[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 8727376 f5dbdf5
+Author: root <root@larrydb2nodejs1.fyre.ibm.com>
+Date:   Fri Sep 1 02:52:13 2017 -0700
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 87273766acf1b77f43648804b0acc92bdc32e9d3[m
+Author: root <root@larrydb2nodejs1.fyre.ibm.com>
+Date:   Fri Sep 1 02:51:38 2017 -0700
+
+    ignore db2cre.json
+
+[33mcommit f5dbdf589aa9067eeb15f8552eaeb14f46c12d36[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Sep 1 17:49:18 2017 +0800
+
+    multiple users
+
+[33mcommit 2d57ed7f5617035b7b5e526477d7657503882dfa[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Sep 1 16:20:53 2017 +0800
+
+    es5
+
+[33mcommit 620fec3ed1e3ca201523433612a601729c5f60b8[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Sep 1 16:18:26 2017 +0800
+
+    defects
+
+[33mcommit 9c109ab0345705b42e120183f7ff8f174b5d12a1[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Sep 1 16:11:43 2017 +0800
+
+    better ui
+
+[33mcommit bb00cc1ffc0fb8b97a32773e1e45e493d171ccbf[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Fri Sep 1 11:48:13 2017 +0800
+
+    submit
+
+[33mcommit 6272f267ce0d2d158f6ae56b21832512b9d90750[m[33m ([m[1;31morigin/test[m[33m)[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Sep 1 10:43:19 2017 +0800
+
+    apply strict mode
+
+[33mcommit 6dc39747b7d0d1481d6137f56607a37395cb80a8[m
+Merge: c9f69ad fd4412e
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Fri Sep 1 09:36:42 2017 +0800
+
+    resolve conflict
+
+[33mcommit c9f69adb75e82de63a00366ce69785c2777ba90d[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Fri Sep 1 09:30:21 2017 +0800
+
+    submit
+
+[33mcommit fd4412e96290e0fc396c3c54c11cd10c2344dcb0[m[33m ([m[1;31mlfyre/test[m[33m)[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Sep 1 09:21:16 2017 +0800
+
+    db cred
+
+[33mcommit 6f5a1aaa6ad2da069e13f63d26019d43d9fb8d60[m
+Author: wyuwbj <wyuwbj@cn.ibm.com>
+Date:   Fri Aug 25 17:24:35 2017 +0800
+
+    enter btn login
+
+[33mcommit ebc52552481b7090d4352b39bba59a09583c837a[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Thu Aug 24 16:50:22 2017 +0800
+
+    submit
+
+[33mcommit ca707515bae1da9d1ed1e48b609de0b2bee44d1b[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 24 16:42:01 2017 +0800
+
+    lanpangzi
+
+[33mcommit e6b54d5248833d79d04cfdf57075eb9eaabf66c5[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 24 16:33:34 2017 +0800
+
+    larry project done
+
+[33mcommit 2647c93fac6c6ea59b9111d1ff1e84b2fd4da594[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 24 09:20:48 2017 +0800
+
+    function larry
+
+[33mcommit be333d49b48bfc8e1047d60ef6324d99743bcbd9[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Wed Aug 23 17:38:50 2017 +0800
+
+    import bootstrap
+
+[33mcommit d05ef88ea510f73a94b621a6a66944ea1c7959ef[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Wed Aug 23 15:13:45 2017 +0800
+
+    上传
+
+[33mcommit afd2a7e9be3aed949c67c2013c4da73f78492185[m
+Merge: 92ae1ba eaa12fb
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Wed Aug 23 10:04:28 2017 +0800
+
+    resolve conflict
+
+[33mcommit 92ae1ba60d70130a4b81074f31e12c3b77182970[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Tue Aug 22 17:39:15 2017 +0800
+
+     On branch test
+     Your branch is up-to-date with 'lfyre/test'.
+    Changes to be committed:
+            modified:   src/app/index.html
+     Untracked files:
+            src/app/build/db2nodejs_project.css
+
+[33mcommit 16f0b903d511df43b4b8ac6b6206d495e68faefa[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Tue Aug 22 17:39:15 2017 +0800
+
+    resolve conflict
+
+[33mcommit 6f00ce69621a33ffa549ca2df4e20ba5b00624db[m
+Author: zjj <jingjzh@cn.ibm.com>
+Date:   Sun Aug 20 23:28:48 2017 -0400
+
+    index populate
+
+[33mcommit eaa12fbbd1f1f7d0aa05eb8b6f82091ddf260716[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Mon Aug 21 11:21:08 2017 +0800
+
+    socket
+
+[33mcommit 230175ca7a58ead84362ed05977445a032fa986d[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Mon Aug 21 10:31:20 2017 +0800
+
+    test
+
+[33mcommit c695c73ba7cb41268d5b4daffec33a4aaa1dc278[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 18:26:01 2017 +0800
+
+    socket.io
+
+[33mcommit 1cf7c89e42d66fe652b63a5247dda72a3a587e84[m[33m ([m[1;31morigin/larryDev[m[33m, [m[1;31mlfyre/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 10:24:26 2017 +0800
+
+    update readme
+
+[33mcommit a98483e0c3b5cb64fe70662766a6b5c1811a88a8[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 10:17:32 2017 +0800
+
+    ignore db2.json
+
+[33mcommit 1ed403a9ce901fff63447c444acb1a396aff6531[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 10:14:27 2017 +0800
+
+    db2 config
+
+[33mcommit 6ceb68d280da18ee4b85f4750b23bd0742ec5c20[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 10:13:20 2017 +0800
+
+    ignore config
+
+[33mcommit 7b512bee45b5c331e58d0d2a9f67fb86abc41f99[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 10:11:29 2017 +0800
+
+    reset usr/pwd
+
+[33mcommit d0a771660ba6c4d5f8978ce5482b56f0a007a71a[m
+Author: LarryKX <wyuwbj@cn.ibm.com>
+Date:   Thu Aug 17 10:09:49 2017 +0800
+
+    larry init
+
+[33mcommit 24bf3a588a8b820dd6b859b36f2d89aceac01de8[m
+Author: Mahmoud Khattab <mkhattab@ca.ibm.com>
+Date:   Thu Jun 29 14:41:51 2017 -0400
+
+    Small fix
+
+[33mcommit 966769ba64047061cc8c1b64010eb47ed0571110[m
+Merge: ea8afae c0c1c8c
+Author: Mahmoud Khattab <mkhattab@ca.ibm.com>
+Date:   Thu Jun 29 14:17:27 2017 -0400
+
+    Merge branch 'master' of https://github.com/DB2-Samples/db2nodejs
+
+[33mcommit ea8afae8e64dad981f120f5e9ab45592aff684a5[m
+Author: Mahmoud Khattab <mkhattab@ca.ibm.com>
+Date:   Thu Jun 29 14:17:12 2017 -0400
+
+    Code fixes so it works on windows
+
+[33mcommit c0c1c8c8d19a82017b92427bb910ee8e7816dba4[m
+Author: Peter Kohlmann <peterwilliamkohlmann@gmail.com>
+Date:   Thu Jun 29 11:34:59 2017 -0400
+
+    Update webstore.ddl
+
+[33mcommit 180342f38ca9266176b19feabd31481eb67f277b[m
+Author: Peter Kohlmann <peterwilliamkohlmann@gmail.com>
+Date:   Thu Jun 29 11:09:00 2017 -0400
+
+    Updated Readme
+    
+    Added additional description, information on how to setup NodeJS as well as clarifying how and where to update connection information.
+
+[33mcommit 14e1c1781489f50f85872ade1846aa1e046d1fe4[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 21 10:39:59 2017 -0400
+
+    Update webstore.ddl
+
+[33mcommit b1a53c6cb031bf7307929cb514b46276fa05a56f[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 21 10:39:16 2017 -0400
+
+    Update webstore.ddl
+
+[33mcommit d6cb2a7278398df44648cc4af57e5b1b48b1101c[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 21 10:38:03 2017 -0400
+
+    Update index.js
+
+[33mcommit 0f96221eff0fa856de6c0ca951d49fac7bdcd91b[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 21 10:33:10 2017 -0400
+
+    Update webstore.ddl
+
+[33mcommit c228e8d69cfc4cee067c744bbef418e2d239f4a7[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 21 10:29:27 2017 -0400
+
+    Update populate.js
+
+[33mcommit 63d9f5b9f6a83a402c6cb5936501d7e0ed63b01d[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 21 10:26:29 2017 -0400
+
+    Update README.md
+
+[33mcommit 03e6b80627c0b8805f3263ee0779bbe23ba0bd3d[m
+Merge: 3364f61 24c8bfe
+Author: Mahmoud Khattab <mkhattab@ca.ibm.com>
+Date:   Wed Jun 14 14:45:27 2017 -0400
+
+    Merge branch 'master' of https://github.com/DB2-Samples/db2nodejs
+
+[33mcommit 3364f612f8be84fa8e79b51d5cd561bd89132658[m
+Author: Mahmoud Khattab <mkhattab@ca.ibm.com>
+Date:   Wed Jun 14 14:45:08 2017 -0400
+
+    Parameter tweak
+
+[33mcommit 24c8bfea3e528af4b96c3785e2aa934abdad9663[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Wed Jun 14 14:35:03 2017 -0400
+
+    Create README.md
+
+[33mcommit 1083a2c53d1169f041c1c0f734bbaf0dc10a5c45[m
+Author: Mahmoud Khattab <mkhattab@ca.ibm.com>
+Date:   Wed Jun 14 14:21:44 2017 -0400
+
+    Genericized code. DB ddl and script to populate added
+
+[33mcommit eea7b8ae3978846abc1e3bc04b4156d6bf531358[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Tue Jun 13 14:17:37 2017 -0400
+
+    Create Notice.txt
+
+[33mcommit ada9b23478c20492ec9d28f659ec2bd3c0761af9[m
+Author: mkhattab1 <mkhattab@ca.ibm.com>
+Date:   Tue Jun 13 14:15:44 2017 -0400
+
+    Initial commit

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 var express = require('express');
 var path = require('path');
 var IO = require('socket.io');
@@ -97,7 +97,6 @@ socketIO.on('connection', function (socket) {
             delete userAuth[userID];
         }
         socket.leave(newUserID);
-
         // 通知房间内人员
         socketIO.to(newUserID).emit('sys', userID + '退出了房间');
         console.log(userID + '加入了退出了房间');
