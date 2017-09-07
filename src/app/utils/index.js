@@ -1,4 +1,4 @@
-
+'use strict';
 function Demo(num, socket, id, cmd, stop, cred) {
     var ibmdb = require('ibm_db');		//For connecting to DB
     var Pool = require("ibm_db").Pool 	// For connection pooling
@@ -70,18 +70,18 @@ function Demo(num, socket, id, cmd, stop, cred) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
     socket.to(id).emit(cmd, new Date());
-    end_time = new Date().valueOf() + maxRunTime * 60000 // This is the time we want the app to stop running at
+    let end_time = new Date().valueOf() + maxRunTime * 60000 // This is the time we want the app to stop running at
 
     ibmdb.debug(true); // Turning debug on allows us to see what queries are run via the console
 
 // Setup connection pool used for making purchases
-    purchasingPool = new Pool()
+    let purchasingPool = new Pool()
     purchasingPool.setMaxPoolSize(purchasingMaxConnections);
     purchasingPool.setConnectTimeout(connTimeout);
     purchasingPool.init(purchasingInitConnections, connString)
 
 // Setup connection pool used for customer service
-    customerServicePool = new Pool()
+    let customerServicePool = new Pool()
     customerServicePool.setMaxPoolSize(customerServiceMaxConnections);
     customerServicePool.setConnectTimeout(connTimeout);
     customerServicePool.init(customerServiceInitConnections, connString)
@@ -124,7 +124,7 @@ function Demo(num, socket, id, cmd, stop, cred) {
                         resolve(user);
                     });
                 }).then((user) => { // Now we have the user info
-                    choiceOfAction = getRandomInt(1, sumPoolUsageWeights) //we randomly decide their behaviour based on weights
+                    let choiceOfAction = getRandomInt(1, sumPoolUsageWeights) //we randomly decide their behaviour based on weights
                     let UserName = user.C_SALUTATION + user.C_LAST_NAME;
                     if (choiceOfAction <= purchasingWeight) { // In this case, the customer has logged in to make a purchase
                         socket.to(id).emit(cmd, k, UserName, 'starts purchasing');
@@ -156,8 +156,8 @@ function Demo(num, socket, id, cmd, stop, cred) {
 
                                         purchasingPool.open(connString, (err, conn) => {
                                             socket.to(id).emit(cmd, k, UserName, 'is buying an item');
-                                            item = rows[getRandomInt(0, 8)] // Randomly select one of the items on this page
-                                            sql2 = 'INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(' + user.C_CUSTOMER_SK + ', ' + item.INV_ITEM_SK + ', ' + getRandomInt(1, item.INV_QUANTITY_ON_HAND) + ');'
+                                            let item = rows[getRandomInt(0, 8)] // Randomly select one of the items on this page
+                                            let sql2 = 'INSERT INTO "WEBSTORE"."WEBSALES" ("WS_CUSTOMER_SK","WS_ITEM_SK","WS_QUANTITY") VALUES(' + user.C_CUSTOMER_SK + ', ' + item.INV_ITEM_SK + ', ' + getRandomInt(1, item.INV_QUANTITY_ON_HAND) + ');'
                                             conn.querySync(sql2);
                                             conn.close();
                                             i++;
@@ -191,7 +191,7 @@ function Demo(num, socket, id, cmd, stop, cred) {
                                 }
 
                                 // Randomly select an order belonging to this customer
-                                sql = "select * from WEBSTORE.WEBSALES where WS_CUSTOMER_SK = " + user.C_CUSTOMER_SK + " order by RAND() fetch first 1 rows only"
+                                let sql = "select * from WEBSTORE.WEBSALES where WS_CUSTOMER_SK = " + user.C_CUSTOMER_SK + " order by RAND() fetch first 1 rows only"
                                 var order = conn.querySync(sql)[0];
 
                                 // Put this in a try-catch just in case this customer has no orders
@@ -229,12 +229,12 @@ function Demo(num, socket, id, cmd, stop, cred) {
                         console.log(user)	// Let's insert the user info
                         purchasingPool.open(connString, (err, conn) => {
                             // Insert a JSON to the table using JSON2BSON
-                            sql = "INSERT INTO  \"WEBSTORE\".\"TESTJSON\" (\"JSON_FIELD\") VALUES(SYSTOOLS.JSON2BSON('" + JSON.stringify(user) + "'))" // It needs to be converted to a string before put in the sql
+                            let sql = "INSERT INTO  \"WEBSTORE\".\"TESTJSON\" (\"JSON_FIELD\") VALUES(SYSTOOLS.JSON2BSON('" + JSON.stringify(user) + "'))" // It needs to be converted to a string before put in the sql
                             conn.querySync(sql);
                             console.log(".\n.\n")
                             console.log("NOW LET'S RETRIEVE A JSON FROM THE TABLE")
                             sql = "SELECT SYSTOOLS.BSON2JSON(JSON_FIELD) FROM WEBSTORE.TESTJSON order by rand() fetch first 1 rows only"
-                            result = conn.querySync(sql)
+                            let result = conn.querySync(sql)
                             console.log(result[0]['1']) // For some reason the JSON is returned inside another JSON with one element labeled '1'
 
                             conn.close()
