@@ -2,3 +2,4 @@ node_modules/
 npm-debug.log
 config/
 .idea/
+src/app/utils/db2cred.json

@@ -69,7 +69,6 @@ function Demo(num, socket, id, cmd, stop, cred) {
     function getRandomInt(minimum, maximum) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
-    socket.to(id).emit(cmd, new Date());
     let end_time = new Date().valueOf() + maxRunTime * 60000 // This is the time we want the app to stop running at
 
     ibmdb.debug(true); // Turning debug on allows us to see what queries are run via the console
@@ -101,7 +100,7 @@ function Demo(num, socket, id, cmd, stop, cred) {
             return stop();
         }, (next_run) => { // Loop so when this simulated client ends, a new one starts
             if (new Date().valueOf() >= end_time && maxRunTime != 0) {
-                socket.to(id).emit(cmd, new Date());
+                //socket.to(id).emit(cmd, new Date());
                 process.exit()
             } // Check if it's time to kill the app
             var k = getRandomInt(1, numClients);
@@ -112,7 +111,7 @@ function Demo(num, socket, id, cmd, stop, cred) {
                     customerServicePool.open(connString, (err, conn) => {
                         if (err) {
                             console.log(err);
-                            socket.to(id).emit(cmd, err);
+                            //socket.to(id).emit(cmd, err);
                             return;
                         }
                         //Get user info:
@@ -185,8 +184,7 @@ function Demo(num, socket, id, cmd, stop, cred) {
                             // In this case we want to use the customer service connection pool
                             customerServicePool.open(connString, (err, conn) => {
                                 if (err) {
-                                    console.log(err);
-                                    socket.to(id).emit(cmd, err);
+                                    //socket.to(id).emit(cmd, err);
                                     return;
                                 }
 
@@ -212,10 +210,8 @@ function Demo(num, socket, id, cmd, stop, cred) {
 
                                 }
                                 catch (err) { // Alert if there are no orders for this customer
-                                    console.log(err);
                                     socket.to(id).emit(cmd, k, UserName, 'didn\' make an order.');
                                     socket.to(id).emit(cmd, k, UserName, 'signs out');
-                                    console.log('SILLY ' + user.C_FIRST_NAME + user.C_LAST_NAME + 'HAS NO ORDERS TO UPDATE!!');
                                     conn.close();
                                 }
                                 conn.close();
