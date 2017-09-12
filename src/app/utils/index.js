@@ -25,8 +25,8 @@ function Demo(num, socket, id, cmd, stop, cred) {
     console.log(num+" clients");
     var numClients = parseInt(num)||4; 	// Number of simulated clients
 
-    var minTimeout = 1000;	// Minimum amount of time between customer actions
-    var maxTimeout = 10000; // Maximum amount of time between customer actions
+    var minTimeout = 500;	// Minimum amount of time between customer actions
+    var maxTimeout = 1000; // Maximum amount of time between customer actions
 
     var purchasingWeight = 4;		// Purchasing demonstrates SELECTS and INSERTS
     var customerServiceWeight = 2;  // Customer service demonstrates UPDATES and DELETES
@@ -118,7 +118,7 @@ function Demo(num, socket, id, cmd, stop, cred) {
                         var sql = "select * from WEBSTORE.CUSTOMER order by RAND() fetch first 1 rows only"
                         var user = conn.querySync(sql)[0];
                         let UserName = user.C_SALUTATION + user.C_LAST_NAME;
-                        socket.to(id).emit(cmd, k, UserName, "signes in");
+                        socket.to(id).emit(cmd, k, UserName, "signs in");
                         conn.close();
                         resolve(user);
                     });

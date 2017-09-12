@@ -28,9 +28,7 @@ var usersCredList = new usersCred();
 var dbCredList = usersCredList.read();
 
 var userAuth = {};
-const usrPwd = {
-  "larry":"passw0rd"
-}
+var usrPwd = usersCredList.readUser();
 
 socketIO.on('connection', function (socket) {
     // 获取请求建立socket连接的url
@@ -225,6 +223,7 @@ router.get('/:userID', function (req, res) {
             });
             if(!usrPwd[params.username]){
                 usrPwd[params.username] = params.password;
+                usersCredList.writeUser(usrPwd);
                 userAuth[params.username] = 1;
                 res.send("{\"result\":\"success\",\"user\":\""+params.username+"\"}");
             }
@@ -238,8 +237,6 @@ router.get('/:userID', function (req, res) {
         }
     }
 });
-
-
 
 
 console.log(__dirname);
