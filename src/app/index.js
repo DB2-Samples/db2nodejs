@@ -2,15 +2,6 @@
 var express = require('express');
 var path = require('path');
 var IO = require('socket.io');
-//一些关于数据的内容
-//var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var multer = require('multer');
-var mongoose = require('mongoose');
-var session = require('express-session');
-//
 var router = express.Router();
 
 var demo = require("./utils/index").demo;
@@ -18,19 +9,7 @@ var product = require("./utils/index").product;
 var populate = require("./utils/populate").populate;
 var usersCred = new require('./utils/user_cred').users;
 
-//数据库
-global.dbHandel = require('./database/dbHandel');
-global.db = mongoose.connect("mongodb://localhost:27017/nodedb");
-//
 var app = express();
-//
-app.use(session({
-    secret: 'secret',
-    cookie:{
-        maxAge: 1000*60*30
-    }
-}));
-//
 
 var server = require('http').Server(app);
 app.use(express.static(__dirname));
@@ -38,26 +17,6 @@ app.set('views', __dirname);
 app.set('view engine', 'hbs');
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'hbs');
-
-//
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(function(req,res,next){
-    res.locals.user = req.session.user;
-    var err = req.session.error;
-    delete req.session.error;
-    res.locals.message = "";
-    if(err){
-        res.locals.message = '<div class="alert alert-danger" style="margin-bottom:20px;color:red;">'+err+'</div>';
-    }
-    next();
-});
-//
 
 
 
@@ -279,41 +238,9 @@ router.get('/:userID', function (req, res) {
         }
     }
 });
-//
-/* GET register page. */
-router.get("/register",function(req,res){    // 到达此路径则渲染register文件，并传出title值供 register.html使用
-    res.render("register",{title:'User register'});
-}).post(function(req,res){
-    //这里的User就是从model中获取user对象，通过global.dbHandel全局方法（这个方法在app.js中已经实现)
-    var User = global.dbHandel.getModel('user');
-    var uname = req.body.uname;
-    var upwd = req.body.upwd;
-    User.findOne({name: uname},function(err,doc){   // 同理 /login 路径的处理方式
-        if(err){
-            res.send(500);
-            req.session.error =  '网络异常错误！';
-            console.log(err);
-        }else if(doc){
-            req.session.error = '用户名已存在！';
-            res.send(500);
-        }else{
-            User.create({ 							// 创建一组user对象置入model
-                name: uname,
-                password: upwd
-            },function(err,doc){
-                if (err) {
-                    res.send(500);
-                    console.log(err);
-                } else {
-                    req.session.error = '用户名创建成功！';
-                    res.send(200);
-                }
-            });
-        }
-    });
-});
 
-//
+
+
 
 console.log(__dirname);
 app.use('/', router);
