@@ -4,6 +4,7 @@
     <title>Project X</title>
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap.min.css">
     <script src="build/jquery.min.js"></script>
+    <script src="build/jquery.validate.js"></script>
     <script type="text/javascript" src="build/login.js"></script>
     <style>
         body{
@@ -148,9 +149,9 @@
                 <div id="qlogin" class="qlogin" style="display: none">
 
                     <div class="form-group" >
-                        <input type="text" class="form-control" id="signupusername" aria-describedby="emailHelp" placeholder="User name.">
-                        <input type="password" class="form-control" id="signuppassword" placeholder="Password.">
-                        <input type="password" class="form-control" id="confirmpassword" placeholder="Confirm password.">
+                        <input type="text" class="form-control required" id="signupusername" aria-describedby="emailHelp" placeholder="User name.">
+                        <input type="password" class="form-control required" id="signuppassword" placeholder="Password.">
+                        <input type="password" class="form-control required" id="confirmpassword" placeholder="Confirm password.">
                         <button onclick="signUp()" class="btn login btn-primary form-control" type="button">
                             Sign up
                         </button>
@@ -279,6 +280,21 @@
            });
        }
    }
+</script>
+
+<script>
+$('div :input').blur(function(){
+    var $parent = $(this).parent();
+    var regExp = /[a-z]$/;
+    if($(this).is('#signupusername')){
+        if(this.value===""||!regExp.test($(this).val())){
+            $(this).val("");
+            var errorMsg='Please enter the correct User name.Please use the combination of a-z';
+            alert(errorMsg);
+            return;
+        }
+    }
+})
 </script>
 
 </html>
