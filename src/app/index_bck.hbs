@@ -8,6 +8,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="build/jquery.min.js"></script>
     <script src="service/service.js"></script>
+    <script src="build/bootstrap/js/bootstrap.min.js"></script>
     <style>
         body{position: relative;overflow: hidden;}
         .main {
@@ -38,17 +39,18 @@
             overflow: auto;
         }
         .credential, .client-control{
-            height:70%;
+
             border-bottom: 1px solid #666;
             padding:10px 20px;
             overflow: auto;
         }
         .client-control{
-            height:30%;
+
             border:none;
         }
         .credential h4, .client-control h4{
             margin-bottom: 20px;
+
         }
         #demo div{
             margin: 20px 10px;
@@ -133,7 +135,7 @@
             </button>
             <a href="index.html">
                 <button  class="btn btn-primary" type="button">
-                    QUIT
+                    Sign Out
                 </button>
             </a>
         </nav>
@@ -148,29 +150,47 @@
     <div class="main">
         <span style="width: 30%;" class="left-control bg-light">
             <div class="credential">
-                <h4>Db2 Credential</h4>
-                   <div class="row form-group">
-                        <div class="col-7">
-                          <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="hostname" value="{{hostname}}" name="hostname" type="text" class="form-control" placeholder="Host name">
+                <div class="panel ">
+                <h4>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Db2 Credential
+                    </a>
+                </h4>
+                <div id="collapseOne" class="panel-collapse collapse in" >
+                    <div class="panel panel-default ">
+                        <div class="row form-group">
+                            <div class="col-7">
+                            Host name
+                            <a style="color:red">*</a>
+                                <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="hostname" value="{{hostname}}" name="hostname" type="text" class="form-control required" placeholder="Host name">
+                            <span></span>
+                            </div>
+                            <div class="col-5">
+                            Port
+                            <a style="color:red">*</a>
+                                <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="port" value="{{port}}" name="port" type="number" class="form-control required" placeholder="Port">
+                            <span></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            DB name
+                            <a style="color:red">*</a>
+                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" style="text-transform:uppercase;" class="form-control required" value="{{db}}" id="dbname" name="dbname" aria-describedby="emailHelp" placeholder="DB name ">
                             <span></span>
                         </div>
-                        <div class="col-5">
-                          <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="port" value="{{port}}" name="port" type="number" class="form-control" placeholder="Port">
+                        <div class="form-group">
+                            DB2 User
+                            <a style="color:red">*</a>
+                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" class="form-control required" value="{{username}}" id="dbuser" name="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
                             <span></span>
+                        </div>
+                        <div class="form-group">
+                            Password
+                            <a style="color:red">*</a>
+                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="password" id="dbpassword" value="{{password}}" name="dbpassword" class="form-control required" id="exampleInputPassword1" placeholder="Password">
+                        <span></span>
                         </div>
                     </div>
-                  <div class="form-group">
-                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" style="text-transform:uppercase;" class="form-control" value="{{db}}" id="dbname" name="dbname" aria-describedby="emailHelp" placeholder="DB name ">
-                      <span></span>
-                  </div>
-                <div class="form-group">
-                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" class="form-control" value="{{username}}" id="dbuser" name="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
-                    <span></span>
-                  </div>
-                  <div class="form-group">
-                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="password" id="dbpassword" value="{{password}}" name="dbpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                      <span></span>
-                  </div>
                     <div>
                         <button onclick="test()" type="submit" class="btn btn-primary">Test connection</button>
                     </div>
@@ -178,19 +198,32 @@
                         <button onclick="confirmLoad()" class="btn btn-primary">Load data</button>
                         <button onclick="confirmClean()" class="btn btn-danger">Clear data</button>
                     </div>
+                </div>
+                </div>
             </div>
+
             <div class="client-control">
-                <h4>Application Connection</h4>
-                    <div class="form-group">
-                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="Enter web store number">
+                <div class="panel panel-default">
+                    <h4>
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Application Connection
+                    </a>
+                    </h4>
+                    <div id="collapseTwo" class="panel-collapse collapse" >
+                        <div class="form-group">
+                        Pool number
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="Pool number">
+                        User number
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="User number">
                         <span></span>
+                        </div>
+                        <button type="button" onclick="start()" class="btn btn-primary">START</button>
+                        <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
                     </div>
-                 <button type="button" onclick="start()" class="btn btn-primary">START</button>
-                  <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
+                </div>
             </div>
         </span>
         <span style="width: 70%;" id="demo" class="main-screen bg-secondary">
-
         </span>
     </div>
 <script>
@@ -222,7 +255,8 @@
 
     function checkValid(node, sigh){
         if(!node.value){
-            node.parentNode.querySelector('span').innerHTML = "Required field!";
+            node.parentNode.querySelector('span').innerHTML = "";
+       //   node.parentNode.querySelector('span').innerHTML = "Required field!";
         }
         else{
             node.parentNode.querySelector('span').innerHTML = "";
