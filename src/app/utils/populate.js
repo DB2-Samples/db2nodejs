@@ -22,7 +22,7 @@ let db_cred = {
 //////////////////////////////////////////
 // Enter your database credentials here //
 //////////////////////////////////////////
-//var db_cred = require('../../config/db2.json');
+//var db_cred = require('../../configbck/db2.json');
 
 // Turn database credentials into a connection string
 //var connString = "DATABASE=" + db_cred.db + ";UID=" + db_cred.username + ";PWD=" + db_cred.password + ";HOSTNAME=" + db_cred.hostname + ";port=" + db_cred.port;
