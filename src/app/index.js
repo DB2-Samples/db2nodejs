@@ -3,10 +3,10 @@ var express = require('express');
 var path = require('path');
 var IO = require('socket.io');
 var router = express.Router();
-var demo = require("./utils/index").demo;
-var product = require("./utils/index").product;
-var populate = require("./utils/populate").populate;
 var usersCred = new require('./utils/user_cred').users;
+
+var ConnectionPool = require("./utils/connectionPool").connectionPool;
+var dbDriver = require("./utils/DataLoad").dataLoad;
 
 var app = express();
 var server = require('http').Server(app);
@@ -53,19 +53,31 @@ socketIO.on('connection', function (socket) {
         dbCredList[userID] = cred;
         usersCredList.write(dbCredList);
         console.log(userID + '加入了');
-        var db_cre = new populate(cred);
-        if(db_cre.test()==1) {
-            if(db_cre.testData()==1) {
-                if (!socketList[newUserID]) {
-                    socketList[newUserID] = new product(num, socketIO, newUserID, 'msg');
+
+        let pop = new dbDriver();
+        let run = {
+            success: () => {
+                if (socketList[newUserID]) {
+                    socketList[newUserID].stop();
+                    delete socketList[newUserID];
                 }
-                socketList[newUserID].start();
+                if(!socketList[newUserID]){
+                    //socketList[newUserID] = new product(num, socketIO, newUserID, 'msg');
+                    console.log("refresh");
+                    socketList[newUserID] = new ConnectionPool();
+                }
+                socketList[newUserID].setSocket(socketIO, 'msg', newUserID);
+                socketList[newUserID].start(cred, 5, 2, num, null);
+            },
+            error: () => {
+                socketIO.to(newUserID).emit('sys', 'nodata');
+            },
+            deferred: () => {
+                socketIO.to(newUserID).emit('sys', 'nodata');
             }
-            else socketIO.to(newUserID).emit('sys', 'nodata');
         }
-        else{
-            socketIO.to(newUserID).emit('sys', 'nocred');
-        }
+        pop.initPool(cred, 1, false);
+        pop.testMockData(run);
     });
 
     socket.on('stop', function () {
@@ -107,7 +119,7 @@ router.get('/:userID/:path', function(req, res){
                 let prop = stat.split('=');
                 db_oper[prop[0]] = prop[1];
             });
-            let pop;
+            let pop = new dbDriver();
             let userid = db_oper.userid;
             delete db_oper.userid;
             if (db_oper.cmd == 'test') {
@@ -120,15 +132,18 @@ router.get('/:userID/:path', function(req, res){
                 console.log(db_oper);
                 dbCredList[userid] = db_oper;
                 usersCredList.write(dbCredList);
-                if (!pop) pop = new populate(db_oper);
-                if (pop.test() == 1) {
-                    result = {
-                        severity: "success",
-                        title: "SUCCESS!",
-                        body: "Successfully connect to the database."
+                pop.initPool(db_oper,1,true);
+                let callBack = (resultDB) => {
+                    if(resultDB[0]){
+                        result = {
+                            severity: "success",
+                            title: "SUCCESS!",
+                            body: "Successfully connect to the database."
+                        }
                     }
+                    res.send(JSON.stringify(result));
                 }
-                res.send(JSON.stringify(result));
+                pop.testConnection(callBack)
             }
             else if (db_oper.cmd == 'load') {
                 let result = {
@@ -139,25 +154,47 @@ router.get('/:userID/:path', function(req, res){
                 delete db_oper.cmd;
                 dbCredList[userid] = db_oper;
                 usersCredList.write(dbCredList);
-                if (!pop) pop = new populate(db_oper);
-                if (pop.test() == 1) {
-                    if (pop.testData() == 1) {
-                        result = {
-                            severity: "info",
-                            title: "ALREADY EXISTS!",
-                            body: "There's already mock data in the certain db table."
-                        }
-                    }
-                    else {
-                        pop.load();
+                pop.initPool(db_oper,1,null);
+                let callBack3 = {
+                    success: () => {
                         result = {
                             severity: "success",
                             title: "SUCCESS!",
                             body: "Successfully load the mock data."
                         }
+                        res.send(JSON.stringify(result));
+                    },
+                    error: () => {
+                        res.send(JSON.stringify(result));
                     }
                 }
-                res.send(JSON.stringify(result));
+                let callBack2 = () => {
+                    pop = new dbDriver();
+                    pop.initPool(db_oper,1,null);
+                    pop.importData(callBack3);
+                }
+                let callBack1 = {
+                    success:callBack2,
+                    error: () => { res.send(JSON.stringify(result))}
+                }
+                let callBack = {
+                    success: () => {
+                        console.log("success");
+                        result = {
+                            severity: "info",
+                            title: "ALREADY EXISTS!",
+                            body: "There's already mock data in the certain db table."
+                        }
+                        res.send(JSON.stringify(result));
+                    },
+                    error: () => {
+                        pop = new dbDriver();
+                        pop.initPool(db_oper,1,null);
+                        pop.importTable(callBack1)
+                    },
+                    deferred: callBack2
+                }
+                pop.testMockData(callBack);
             }
             else if (db_oper.cmd == 'clear') {
                 let result = {
@@ -168,17 +205,21 @@ router.get('/:userID/:path', function(req, res){
                 delete db_oper.cmd;
                 dbCredList[userid] = db_oper;
                 usersCredList.write(dbCredList);
-                if (!pop) pop = new populate(db_oper);
-                if (pop.test() == 1) {
-                    if (pop.delete() == 1) {
+                pop.initPool(db_oper,1,false);
+                let callBack = {
+                    success: () => {
                         result = {
                             severity: "success",
                             title: "SUCCESS!",
                             body: "Successfully clear the table data."
                         }
+                        res.send(JSON.stringify(result));
+                    },
+                    error: () => {
+                        res.send(JSON.stringify(result));
                     }
                 }
-                res.send(JSON.stringify(result));
+                pop.cleanData(callBack);
             }
         }
     }

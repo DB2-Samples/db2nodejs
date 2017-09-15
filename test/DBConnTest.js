@@ -1,5 +1,5 @@
 var db_cred = {
-        "db": "wangyu",
+        "db": "WEBSTORE",
         "hostname": "9.30.147.53",
         "port": 50000,
         "username": "db2inst1",

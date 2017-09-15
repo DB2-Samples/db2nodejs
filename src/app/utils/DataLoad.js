@@ -39,9 +39,9 @@ let DataLoad = function() {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
 
-    this.testConnection = () => {
+    this.testConnection = (callBack) => {
         let sql = "select 1 from \"SYSIBM\".\"SYSTABLES\"";
-        return this.testSQL(sql)
+        return this.singleQuery(sql, callBack);
     }
 
     this.runSQL = (conn, sql) => {
@@ -72,7 +72,7 @@ let DataLoad = function() {
         return result;
     }
 
-    this.testSQL = (sql) => {
+    this.testSQL = (sql, callBack) => {
         if(typeof sql === "string") sql = [sql];
         let {pool, connStr} = this;
         let exist = 0;
@@ -80,6 +80,7 @@ let DataLoad = function() {
         pool.open(connStr, (err, conn) => {
            if(err){
                exist = -1; return ;
+               if(callBack && callBack.error) callBack.error();
            }
            if(sql.length>0) {
                let result;
@@ -90,12 +91,13 @@ let DataLoad = function() {
                this.connNum--;
                //console.log(result);
                exist = 1;
+               if(callBack && callBack.success) callBack.success();
            }
         });
         return exist;
     }
 
-    this.testSQLAsync = (sql) => {
+    this.testSQLAsync = (sql, callBack) => {
         if(typeof sql === "string") sql = [sql];
         let {pool, connStr} = this;
         this.connNum++;
@@ -107,6 +109,12 @@ let DataLoad = function() {
                 next();
             },(err)=>{
                 conn.close();
+                if(i==sql.length){
+                    if(callBack && callBack.success) callBack.success();
+                }
+                else{
+                    if(callBack && callBack.error) callBack.error();
+                }
                 this.connNum--;
             });
         })
@@ -115,23 +123,51 @@ let DataLoad = function() {
     this.getConnNum = () => this.connNum;
     this.getQueryNum = () => this.queryNum;
 
-    this.singleQuery = (sql) => {
-        let {pool, connStr} = this, result;
+    this.singleQuery = (sql, callBack) => {
+        let {pool, connStr} = this;
+        let result;
         this.connNum++;
         pool.open(connStr, (err, conn) => {
             result = this.runSQL(conn, sql);
+            if(callBack) callBack(result);
             conn.close();
             this.connNum--;
         });
-        return result;
     }
 
-    this.testTable = (tabName) => {
+    this.testTable = (tabName, callBack) => {
         let sql = "select count(*) from "+tabName;
-        return this.testSQL(sql);
+        let {pool, connStr} = this;
+        let exist = -1;
+        pool.open(connStr,(err, conn) => {
+            if (err) {
+                exist = -1;
+                if(callBack && callBack.error) callBack.error();
+            }
+            try {
+                let num = conn.querySync(sql)[0]['1'];
+                console.log(num);
+                if(parseInt(num)>0){
+                    exist = 1;
+                    if(callBack && callBack.success) callBack.success();
+                }
+                else{
+                    if(callBack && callBack.deferred) callBack.deferred();
+                }
+            }
+            catch(err){
+                exist = 0;
+                if(callBack && callBack.error) callBack.error();
+            }
+        });
+        return exist;
     }
 
-    this.importTable = () => {
+    this.testMockData = (callBack) => {
+        this.testTable("WEBSTORE.INVENTORY", callBack)
+    }
+
+    this.importTable = (callBack) => {
         let demo = require("./DDL").demo;
         let ddl_all = new demo().getDDL();
         let ddls = [];
@@ -141,7 +177,7 @@ let DataLoad = function() {
             let fir = "DROP TABLE "+tbName;
             ddls = [...ddls,fir,ddl,...privilege];
         });
-        this.testSQL(ddls);
+        this.testSQL(ddls, callBack);
     }
 
     this.getCustSQL = () => {
@@ -157,22 +193,26 @@ let DataLoad = function() {
     this.getInventorySQL = () => {
         let sqls = [];
         let getRandomInt = this.getRandomInt;
-        for(let i=0;i<1000;i++){
+        for(let i=0;i<100;i++){
             let sql = "INSERT INTO \"WEBSTORE\".\"INVENTORY\" (\"INV_QUANTITY_ON_HAND\") VALUES(" + getRandomInt(0, 1000) + ")"
             sqls.push(sql);
         }
         return sqls;
     }
 
-    this.importData = () => {
+    this.importData = (callBack) => {
         let sqlCust = this.getCustSQL();
         let sqlInvet = this.getInventorySQL();
         let sqls = [...sqlCust,...sqlInvet];
-        this.testSQLAsync(sqls);
+        this.testSQL(sqls, callBack);
     }
 
-    this.cleanData = () => {
-        this.importTable();
+    this.cleanData = (callBack) => {
+        this.importTable(callBack);
+    }
+
+    this.testData = () => {
+
     }
 
 }
