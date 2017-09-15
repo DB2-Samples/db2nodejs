@@ -3,14 +3,12 @@ var express = require('express');
 var path = require('path');
 var IO = require('socket.io');
 var router = express.Router();
-
 var demo = require("./utils/index").demo;
 var product = require("./utils/index").product;
 var populate = require("./utils/populate").populate;
 var usersCred = new require('./utils/user_cred').users;
 
 var app = express();
-
 var server = require('http').Server(app);
 app.use(express.static(__dirname));
 app.set('views', __dirname);
@@ -96,6 +94,7 @@ socketIO.on('connection', function (socket) {
     // 接收用户消息,发送相应的房间
     socket.on('message', function (msg) {
     });
+
 });
 router.get('/:userID/:path', function(req, res){
     var user = req.params.userID;
@@ -237,7 +236,6 @@ router.get('/:userID', function (req, res) {
         }
     }
 });
-
 
 console.log(__dirname);
 app.use('/', router);
