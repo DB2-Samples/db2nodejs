@@ -32,23 +32,11 @@ If you have not already, download node.js and install it on your local machine. 
     
 2. Run the SQL to create the tables. Run ```db2 -tvf webstore.ddl``` from the Db2 command line. You can also run the script using Data Server Manager. If you use DSM, make sure the SQL Editor Run Method (Edit SQL Options) is set to CLP with SSH.
 
-3. Replace the corresponding credentials for the Db2 database you want to use in the `db2.config` file
-    i. create db2.json under config folder
-    ii. record the db credential info in db2.json
-```{
-        "db": "WEBSTORE",
-        "hostname": "127.0.0.1",
-        "port": 50000,
-        "username": "DB2INST1",
-        "password": ""
-    }
-```
-
-4. Run ```npm run populate``` to populate the database with some randomly generated customer information and inventory.
 
 ## Setting up the app
 
 Start your app locally with the following command
   ```
-  npm start
+  npm run test
   ```
+The app will be launched at http://localhost:8888/
