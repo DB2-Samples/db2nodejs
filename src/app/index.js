@@ -80,7 +80,7 @@ socketIO.on('connection', function (socket) {
                 socketIO.to(newUserID).emit('sys', 'nodata');
             }
         }
-        pop.initPool(cred, 1, false);
+        pop.initPool(cred, 1, true);
         pop.testMockData(run);
     });
 
@@ -158,7 +158,7 @@ router.get('/:userID/:path', function(req, res){
                 delete db_oper.cmd;
                 dbCredList[userid] = db_oper;
                 usersCredList.write(dbCredList);
-                pop.initPool(db_oper,1,null);
+                pop.initPool(db_oper,1,true);
                 let callBack3 = {
                     success: () => {
                         result = {
@@ -174,7 +174,7 @@ router.get('/:userID/:path', function(req, res){
                 }
                 let callBack2 = () => {
                     pop = new dbDriver();
-                    pop.initPool(db_oper,1,null);
+                    pop.initPool(db_oper,1,true);
                     pop.importData(callBack3);
                 }
                 let callBack1 = {
@@ -193,7 +193,7 @@ router.get('/:userID/:path', function(req, res){
                     },
                     error: () => {
                         pop = new dbDriver();
-                        pop.initPool(db_oper,1,null);
+                        pop.initPool(db_oper,1,true);
                         pop.importTable(callBack1);
                     },
                     deferred: callBack2
@@ -209,7 +209,7 @@ router.get('/:userID/:path', function(req, res){
                 delete db_oper.cmd;
                 dbCredList[userid] = db_oper;
                 usersCredList.write(dbCredList);
-                pop.initPool(db_oper,1,false);
+                pop.initPool(db_oper,1,true);
                 let callBack = {
                     success: () => {
                         result = {
