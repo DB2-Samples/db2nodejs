@@ -128,6 +128,7 @@ let UserLoad = function() {
                     this.cancelOrder(order);
                 else this.updateOrder(order);
             }
+            else this.logout();
         });
         let execute = () => {
             let sql = "select * from WEBSTORE.WEBSALES where WS_CUSTOMER_SK = " + user.C_CUSTOMER_SK + " order by RAND() fetch first 1 rows only";
