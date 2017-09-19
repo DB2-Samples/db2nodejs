@@ -64,14 +64,14 @@ let UserLoad = function() {
             else {
                 this.browse();
             }
-            this.delayQuery(logout);
         }
         this.delayQuery(layBack);
     }
 
-    this.logout = (id) => {
-
-    }
+    this.logout = () => setTimeout(() => {
+        if(this.callBackFuncs && this.callBackFuncs.endCall)
+            this.callBackFuncs.endCall(this.id, this.name)();
+    }, 1000);
 
     this.behaviour = (id, callBackFuncs) => {
         this.callBackFuncs = callBackFuncs;
@@ -116,7 +116,7 @@ let UserLoad = function() {
                 execute();
             }
         }
-        this.logout(this.id);
+        this.logout();
     }
 
     this.alterOrder = () => {
@@ -146,7 +146,7 @@ let UserLoad = function() {
             this.customerServicePool.singleQuery(sql);
         }
         execute();
-        this.logout(this.id);
+        this.logout();
     }
 
     this.cancelOrder = (order) => {
@@ -157,7 +157,7 @@ let UserLoad = function() {
             this.customerServicePool.singleQuery(sql);
         }
         execute();
-        this.logout(this.id);
+        this.logout();
     }
 
     this.jsonStuff = () => {
@@ -169,7 +169,7 @@ let UserLoad = function() {
             this.logout(this.id);
         }
         execute();
-        this.logout(this.id);
+        this.logout();
     }
 
 }

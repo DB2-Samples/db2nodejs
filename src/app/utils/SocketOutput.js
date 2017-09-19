@@ -48,7 +48,7 @@ let Output = function (Socket, Cmd, Uid) {
     }
 
     let userLoadSocketOutput = {
-        login:["querying user table-start", "sign in-success", "failed to sign in-error"],
+        login:["querying user table-start", "signs in-success", "fails to sign in-error"],
         browse:["starts browsing(select)-process", "is browsing(select)-success", "is browsing(select)-error"],
         buy:["starts buying(insert) table-process", "is buying(insert)-success", "is buying(insert)-error"],
         alterorder:["starts checking(select)-process-1-2", "is checking(select)-success-2", "is checking(select)-error-2"],

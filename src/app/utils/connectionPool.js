@@ -12,8 +12,8 @@ let ConnectionPool = function () {
     this.custServicePool = new Pool();
 
     this.init = (cred, size1, size2) => {
-        this.purchasingPool.initPool(cred, size1);
-        this.custServicePool.initPool(cred, size2);
+        this.purchasingPool.initPool(cred, size1, true);
+        this.custServicePool.initPool(cred, size2, true);
     }
 
     this.setPurSize = (size) => {
