@@ -1,18 +1,32 @@
 
 let Output = function (Socket, Cmd, Uid) {
 
-
-    this.generateResult = (id, connNum, queryNum, state) => {
-        let result = {userid: id, connNum, queryNum, state};
+    this.generateResult = (id, username, connNum, queryNum, state) => {
+        let result = {userid: id, connNum, queryNum, state, username};
         result.timestamp = Date.parse(new Date()).toString().substr(0,10);
-        result = JSON.stringify(result);
-        console.log(result);
-        return result;
+        this.resultList.push(result);
+        result.qrPS = this.formatMetric();
+        return JSON.stringify(result);
     }
 
-    this.generateCallback = (state) => (id) => (connNum, queryNum) => {
-        let result = this.generateResult(id, connNum, queryNum, state);
+    this.formatMetric = () => {
+        let lastOne = this.resultList[this.resultList.length-1];
+        let qrPS = 0;
+        this.resultList = this.resultList.filter((item)=>{
+            if(parseInt(item.timestamp)<parseInt(lastOne.timestamp)-1) return false;
+            qrPS += parseInt(item.queryNum);
+            return true;
+        });
+        return qrPS;
+    }
+
+    this.generateCallback = (state) => (id, username) => (connNum, queryNum) => {
+        let result = this.generateResult(id, username, connNum, queryNum, state);
         Socket.to(Uid).emit(Cmd, result);
+    }
+
+    this.endCall = (id, username) => () => {
+        Socket.to(Uid).emit(Cmd, JSON.stringify({userid: id, resultCode: "end", username}));
     }
 
     this.generateCallbackFuncs = (stateList) => {
@@ -28,17 +42,19 @@ let Output = function (Socket, Cmd, Uid) {
         for(let key in userLoadSocketOutput){
             result[key] = this.generateCallbackFuncs(userLoadSocketOutput[key]);
         }
+        result.endCall = this.endCall;
+        this.resultList = [];
         return result;
     }
 
     let userLoadSocketOutput = {
-        login:["querying user table", "sign in", "failed to sign in"],
-        browse:["querying inventory table", "inventory retrieved", "failed to retrieve"],
-        buy:["insert websales table", "inserted successfully", "failed to insert"],
-        alterorder:["alter websales table", "altered successfully", "failed to alter"],
-        updateorder:["update websales table", "updated successfully", "failed to update"],
-        deleteorder:["delete from websales table", "deleted successfully", "failed to delete"],
-        jsonstuff:["json creation on table", "created successfully", "failed to create"]
+        login:["querying user table-start", "sign in-success", "failed to sign in-error"],
+        browse:["starts browsing(select)-process", "is browsing(select)-success", "is browsing(select)-error"],
+        buy:["starts buying(insert) table-process", "is buying(insert)-success", "is buying(insert)-error"],
+        alterorder:["starts checking(select)-process-1-2", "is checking(select)-success-2", "is checking(select)-error-2"],
+        updateorder:["starts updating(update)-process-2", "is updating(update)-success-2", "is updating(update)-error-2"],
+        deleteorder:["starts deleting(delete)-process-2", "is deleting(delete)-success-2", "is deleting(delete)-error-2"],
+        jsonstuff:["starts json func(insert)-process", "completes json func(insert)-success", "completes json func(insert)-error"]
     }
 
 }

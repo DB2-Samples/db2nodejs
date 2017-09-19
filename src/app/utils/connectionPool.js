@@ -10,7 +10,6 @@ let ConnectionPool = function () {
 
     this.purchasingPool = new Pool();
     this.custServicePool = new Pool();
-    this.userList = [];
 
     this.init = (cred, size1, size2) => {
         this.purchasingPool.initPool(cred, size1);

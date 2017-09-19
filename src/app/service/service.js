@@ -81,3 +81,104 @@ function LoadData(msgContainer){
         $('#progressBar')[0].style.display = "none";
     }
 }
+
+function startPool(container){
+
+    var bgColor = ["alert-success", "alert-info", "alert-warning", "alert-danger"];
+
+    this.container = container;
+
+    this.init = function(size1, size2, label1, label2){
+        var that = this;
+        that.container.innerHTML = "";
+        var content = that.generateTopBanner()
+            +that.getDashboard(label1+" connection number:", size1)
+            +that.getDashboard(label2+" connection number:", size2)
+            +that.generateMetric()
+            +that.createPool(label1, 0)
+            +that.createPool(label2, 1);
+        that.container.innerHTML = content;
+        that.startTime = Date.parse(new Date()).toString().substr(0,10);
+    }
+
+    this.generateTopBanner = function(){
+        var date = new Date();
+        var format = function(num){
+            return num<10?'0'+num:num;
+        }
+        var hour = format(date.getHours());
+        var minute = format(date.getMinutes());
+        var second = format(date.getSeconds());
+        var title = "<h4 class='startTime'>Application start - "+hour+":"+minute+":"+second+"</h4>";
+        return title;
+    }
+
+    this.generateMetric = function() {
+        var content = "<div><span>Queries per Second:</span><span id='queryPSec'></span></div><div><span>Total queries:</span><span id='totalQr'>0</span></div>";
+        return content;
+    }
+
+    this.getDashboard = function(title, size){
+        var label = "<span class='poolDash'>"+title+"</span>";
+        var boxes = "";
+        for(var i = 0;i<size;i++){
+            boxes += "<span class='size blank'></span>";
+        };
+        return "<div class='poolLabelDash'>"+label+boxes+"</div>";
+    }
+
+    this.createPool = function(title, i){
+        var header = '<h5 class="poolTitle">'+title+'</h5>';
+        var body = '<div id="pool'+i+'" class="alert '+bgColor[i%4]+'">'+header+'</div>';
+        return body;
+    }
+
+    this.setDash = function(size1, size2){
+        var panel1 = $('.poolLabelDash')[0];
+        var panel2 = $('.poolLabelDash')[1];
+        var loop = function(panel, size) {
+            var spans = panel.querySelectorAll('.size');
+            for (var i = 0; i < spans.length; i++) {
+                if (i < size) spans[i].className = 'size block';
+                else spans[i].className = 'size blank';
+            }
+        }
+        if(size1!==undefined) loop(panel1, size1);
+        if(size2!==undefined) loop(panel2, size2);
+    }
+
+    this.setMetric = function(qPS, delTa){
+        var qpsC = $('#queryPSec')[0];
+        var totalQ = $('#totalQr')[0];
+        totalQ.innerHTML = parseInt(totalQ.innerHTML) + delTa;
+        qpsC.innerHTML = qPS;
+    }
+
+    this.userSignIn = function(pane, user){
+        var userContainer = '<div><button style="margin-left:0%" id="'+user.userid+'" type="button" class="btn btn-info mockUser">Logging...</button></div>';
+        pane.innerHTML = pane.innerHTML + userContainer;
+    }
+
+    this.transfer = function(pane1, pane2, userid){
+        var user = $('#'+userid)[0];
+        if(user&&user.parentNode)
+            pane2.appendChild(user.parentNode);
+    }
+
+    this.moveUser = function(pane, userid, left, success, label){
+        var user = $('#'+userid)[0];
+        if(user) {
+            user.innerHTML = label;
+            if (success == -1) user.className = "btn btn-danger mockUser";
+            else if (success == 0) user.className = "btn btn-info mockUser";
+            else if (success == 1) user.className = "btn btn-success mockUser";
+            user.style.marginLeft = parseInt(user.style.marginLeft) + left + '%';
+        }
+    }
+
+    this.userSignOut = function(pane1, pane2, userid){
+        var user = $('#'+userid)[0];
+        if(user&&user.parentNode) user.parentNode.parentNode.removeChild(user.parentNode);
+    }
+
+}

@@ -48,7 +48,11 @@ socketIO.on('connection', function (socket) {
         socket.join(newUserID);    // 加入房间
         // 通知房间内人员
         var num = parseInt(params.num);
+        var purSize = parseInt(params.purSize)||5;
+        var custSize = parseInt(params.custSize)||2;
         delete params.num;
+        delete params.purSize;
+        delete params.custSize;
         var cred = params;
         dbCredList[userID] = cred;
         usersCredList.write(dbCredList);
@@ -67,10 +71,10 @@ socketIO.on('connection', function (socket) {
                     socketList[newUserID] = new ConnectionPool();
                 }
                 socketList[newUserID].setSocket(socketIO, 'msg', newUserID);
-                socketList[newUserID].start(cred, 5, 2, num, null);
+                socketList[newUserID].start(cred, purSize, custSize, num, null);
             },
             error: () => {
-                socketIO.to(newUserID).emit('sys', 'nodata');
+                socketIO.to(newUserID).emit('sys', 'nocred');
             },
             deferred: () => {
                 socketIO.to(newUserID).emit('sys', 'nodata');
@@ -134,7 +138,7 @@ router.get('/:userID/:path', function(req, res){
                 usersCredList.write(dbCredList);
                 pop.initPool(db_oper,1,true);
                 let callBack = (resultDB) => {
-                    if(resultDB[0]){
+                    if(resultDB&&resultDB[0]){
                         result = {
                             severity: "success",
                             title: "SUCCESS!",
@@ -190,7 +194,7 @@ router.get('/:userID/:path', function(req, res){
                     error: () => {
                         pop = new dbDriver();
                         pop.initPool(db_oper,1,null);
-                        pop.importTable(callBack1)
+                        pop.importTable(callBack1);
                     },
                     deferred: callBack2
                 }

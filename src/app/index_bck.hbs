@@ -5,13 +5,14 @@
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-grid.min.css">
     <link rel="stylesheet" type="text/css" href="build/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" type="text/css" href="build/iconFonts/iconFonts.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="build/jquery.min.js"></script>
     <script src="service/service.js"></script>
     <style>
         body{position: relative;overflow: hidden;}
         .main {
-            height: calc(100% - 56px);
+            height: calc(100% - 76px);
             width: 100%;
             overflow: hidden;
         }
@@ -34,33 +35,73 @@
             padding: 0;
             overflow: hidden;
         }
+        .left-control{overflow: auto;}
         .main-screen{
             overflow: auto;
+            padding: 10px;
+            color: white;
         }
         .credential, .client-control{
-            height:70%;
-            border-bottom: 1px solid #666;
+            border-bottom: 1px solid #aaa;
             padding:10px 20px;
-            overflow: auto;
+            display: block;
         }
-        .client-control{
-            height:30%;
-            border:none;
+        .credential.collapse,.client-control.collapse{
+            height: 50px;
+            overflow: hidden;
+            background-color: #eee;
         }
         .credential h4, .client-control h4{
             margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .displayIcon{
+            float: right;
+            margin-right: 10px;
+        }
+        .credential.collapse .displayIcon:before,.client-control.collapse .displayIcon:before{
+            content:'\e90b';
         }
         #demo div{
-            margin: 20px 10px;
+            margin: 5px;
         }
         button{
             margin:10px;
         }
+        #demo div button{
+            margin: 0;
+        }
         .form-group span{
-            font-size: 12px;
+            font-size: 14px;
             display: block;
-            color:red;
-            margin-bottom:-5px;
+            margin-bottom:2px;
+            margin-left: 10px;
+        }
+        .form-group span:after {
+            content: '*';
+            color: red;
+            margin-left: 2px;
+        }
+        .poolDash{
+            width:50%;
+            display: inline-block;
+        }
+        .size.blank, .size.block{
+            display: inline-block;
+            height:20px;
+            width:20px;
+            border: 1px solid #41d6c3;
+            margin-right: 1px;
+            background-color: white;
+        }
+        .size.block{
+            background-color: #41d6c3;
+        }
+        .btn.mockUser:before{
+            font-family: 'iconFonts' !important;
+            font-size: 18px;
+            content: '\e986';
+            margin-right: 3px;
         }
         #progressBar{
             display: none;
@@ -131,6 +172,7 @@
             <button onclick="toggle()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <button type="button" class="btn btn-info" onclick="javascript:location.href='/'">Sign out</button>
         </nav>
     </div>
     <div id="popupDialog" style="top:-10px" class="alert alert-warning topWarn">
@@ -143,28 +185,28 @@
     <div class="main">
         <span style="width: 30%;" class="left-control bg-light">
             <div class="credential">
-                <h4>Db2 Credential</h4>
+                <h4 onclick="javascript:toggleCollapse(this)">Db2 Credential<span class="displayIcon iconF-arrow_up"></span></h4>
                    <div class="row form-group">
                         <div class="col-7">
-                          <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="hostname" value="{{hostname}}" name="hostname" type="text" class="form-control" placeholder="Host name">
-                            <span></span>
+                            <span>IP Address/Domain</span>
+                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="hostname" value="{{hostname}}" name="hostname" type="text" class="form-control" placeholder="Host name">
                         </div>
                         <div class="col-5">
-                          <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="port" value="{{port}}" name="port" type="number" class="form-control" placeholder="Port">
-                            <span></span>
+                            <span>Port</span>
+                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="port" value="{{port}}" name="port" type="number" class="form-control" placeholder="Port">
                         </div>
                     </div>
                   <div class="form-group">
-                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" style="text-transform:uppercase;" class="form-control" value="{{db}}" id="dbname" name="dbname" aria-describedby="emailHelp" placeholder="DB name ">
-                      <span></span>
+                        <span>Database name</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" style="text-transform:uppercase;" class="form-control" value="{{db}}" id="dbname" name="dbname" aria-describedby="emailHelp" placeholder="DB name ">
                   </div>
-                <div class="form-group">
-                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" class="form-control" value="{{username}}" id="dbuser" name="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
-                    <span></span>
+                    <div class="form-group">
+                        <span>Db2 User</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" class="form-control" value="{{username}}" id="dbuser" name="dbuser" aria-describedby="emailHelp" placeholder="DB2 User ">
                   </div>
                   <div class="form-group">
-                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="password" id="dbpassword" value="{{password}}" name="dbpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                      <span></span>
+                      <span>Password</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="password" id="dbpassword" value="{{password}}" name="dbpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
                   </div>
                     <div>
                         <button onclick="test()" type="submit" class="btn btn-primary">Test connection</button>
@@ -174,11 +216,19 @@
                         <button onclick="confirmClean()" class="btn btn-danger">Clear data</button>
                     </div>
             </div>
-            <div class="client-control">
-                <h4>Application Connection</h4>
+            <div class="client-control collapse">
+                <h4 onclick="javascript:toggleCollapse(this)">App Control Panel<span class="displayIcon iconF-arrow_up"></span></h4>
                     <div class="form-group">
-                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="Enter web store number">
-                        <span></span>
+                        <span>Limit for Purchasing pool</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="purSize" type="number" aria-describedby="emailHelp" placeholder="Connection number - default 5">
+                    </div>
+                    <div class="form-group">
+                        <span>Limit for customer service pool</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="custSize" type="number" aria-describedby="emailHelp" placeholder="Connection number - default 2">
+                    </div>
+                    <div class="form-group">
+                        <span>Parrallel user number</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="User number">
                     </div>
                  <button type="button" onclick="start()" class="btn btn-primary">START</button>
                   <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
@@ -194,6 +244,8 @@
     var shops = {};
     var bgColor = ["alert-success", "alert-info", "alert-warning", "alert-danger"];
     window.service = new LoadData();
+
+    var startp = new startPool(document.getElementById('demo'));
 
     document.getElementById('clientnumber').onkeydown = function(e){
         if(e.which===13){
@@ -216,45 +268,61 @@
     }
 
     function checkValid(node, sigh){
-        if(!node.value){
-            node.parentNode.querySelector('span').innerHTML = "Required field!";
-        }
-        else{
-            node.parentNode.querySelector('span').innerHTML = "";
-        }
-        if(sigh)
-            node.parentNode.querySelector('span').innerHTML = "";
+//        if(!node.value){
+//            node.parentNode.querySelector('span').innerHTML = "Required field!";
+//        }
+//        else{
+//            node.parentNode.querySelector('span').innerHTML = "";
+//        }
+//        if(sigh)
+//            node.parentNode.querySelector('span').innerHTML = "";
     }
 
-    function handleRetailer(num, user, verb){
-        var key = "shop"+num;
-        var shop = document.getElementById(key);
-        if(shop) {
-            if (user == "OPEN" && verb == "OPEN") {
-                shop.innerHTML = "OPEN!!!";
+    function startPoolling(size1, size2){
+        startp.init(size1, size2, "Purchasing Pool", "Customer Service Pool");
+    }
+
+    function handleResult(result){
+        var pane1 = document.getElementById("pool0");
+        var pane2 = document.getElementById("pool1");
+
+        if(result.qrPS && result.queryNum){
+            startp.setMetric(parseInt(result.qrPS), parseInt(result.queryNum));
+        }
+
+        if(result.resultCode){
+            startp.userSignOut(pane1, pane2, result.userid);
+            startp.setDash(0, 0);
+            startp.setMetric(0,0);
+            return ;
+        }
+
+        var states = result.state.split("-");
+
+        if(states[1]=="start"){
+            result.state = states[0];
+            var connNum = parseInt(result.connNum)||0;
+            startp.userSignIn(pane1, result);
+            startp.setDash(connNum, 0);
+        }
+        else {
+            var left = states[1] == "process" ? 3 : 8;
+            var success = states[1] == "error" ? -1 : (states[1] == "success" ? 1 : 0);
+            var name = (!result.username||result.username=="undefined")?"":result.username+" ";
+            var label = name+states[0];
+            var connNum = parseInt(result.connNum)||0;
+            if (states.length >= 4) {
+                startp.transfer(pane1, pane2, result.userid);
+                startp.moveUser(pane2, result.userid, 0, 0, label);
+                startp.setDash(undefined, connNum);
             }
-            else if (user == "CLOSE" && verb == "CLOSE") {
-                shop.innerHTML = "CLOSED!!!";
+            else if (states.length == 3) {
+                startp.moveUser(pane2, result.userid, left, success, label);
+                startp.setDash(undefined, connNum);
             }
-            else {
-                var retailer = shops[key]
-                var inn = "";var j = -1;
-                for(var i = 0;i < retailer.length;i++){
-                    var br = i==(retailer.length-1)?"":'<br/>';
-                    if(retailer[i].name==user){
-                        inn += user + ' ' + verb + br;
-                        j = i;
-                    }
-                    else inn += retailer[i].name + ' ' + retailer[i].verb + br;
-                }
-                if(j==-1){
-                    var br = retailer.length==0?"":'<br/>';
-                    inn += br + user + ' ' + verb;
-                    retailer.push({name:user,verb:verb});
-                }
-                shop.innerHTML = inn;
-                if(verb=="signs out")
-                    retailer.splice(j,1);
+            else if(states.length==2){
+                startp.moveUser(pane1, result.userid, left, success, label);
+                startp.setDash(connNum, 0);
             }
         }
     }
@@ -274,11 +342,14 @@
         }
 
         params.num = num;
+        params.purSize = parseInt(document.getElementById("purSize").value);
+        params.custSize = parseInt(document.getElementById("custSize").value);
 
         socket.emit('start', params);
-        buildRetailer(num);
-        socket.on('msg', function (clientNum, user, verb) {
-            handleRetailer(clientNum, user, verb);
+        //buildRetailer(num);
+        startPoolling(params.purSize, params.custSize);
+        socket.on('msg', function (result) {
+            handleResult(JSON.parse(result));
         });
 
         socket.on('sys', function (stat) {
@@ -378,6 +449,15 @@
             cancelHandler:service.hideDialog
         }
         service.showDialog(params);
+    }
+    function toggleCollapse(node){
+        var classes = node.parentNode.className;
+        if(classes.indexOf('collapse')>-1){
+            node.parentNode.className = classes.replace(' collapse','');
+        }
+        else{
+            node.parentNode.className = classes + " collapse";
+        }
     }
 </script>
 </body>

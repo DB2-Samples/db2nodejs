@@ -58,13 +58,13 @@ let DataLoad = function() {
         else if(sql.query && sql.startCall && sql.successCall && sql.errorCall){
             let {query, startCall, successCall, errorCall} = sql;
             if(typeof query === "string"){
-                startCall(this.connNum, this.queryNum);
+                startCall(this.pool.poolSize, this.queryNum);
                 try{
                     result = conn.querySync(query);
-                    successCall(this.connNum, this.queryNum - 1);
+                    successCall(this.pool.poolSize, this.queryNum - 1);
                 }
                 catch(error){
-                    errorCall(this.connNum, this.queryNum - 1);
+                    errorCall(this.pool.poolSize, this.queryNum - 1);
                 }
             }
         }
@@ -76,7 +76,7 @@ let DataLoad = function() {
         if(typeof sql === "string") sql = [sql];
         let {pool, connStr} = this;
         let exist = 0;
-        this.connNum++;
+        //this.connNum++;
         pool.open(connStr, (err, conn) => {
            if(err){
                exist = -1; return ;
@@ -88,7 +88,7 @@ let DataLoad = function() {
                    this.runSQL(conn, stat);
                })
                conn.close();
-               this.connNum--;
+               //this.connNum--;
                //console.log(result);
                exist = 1;
                if(callBack && callBack.success) callBack.success();
@@ -100,7 +100,7 @@ let DataLoad = function() {
     this.testSQLAsync = (sql, callBack) => {
         if(typeof sql === "string") sql = [sql];
         let {pool, connStr} = this;
-        this.connNum++;
+        //this.connNum++;
         pool.open(connStr, (err, conn) => {
             let i = 0;
             async.whilst(() => i<sql.length, (next) => {
@@ -115,7 +115,7 @@ let DataLoad = function() {
                 else{
                     if(callBack && callBack.error) callBack.error();
                 }
-                this.connNum--;
+                //this.connNum--;
             });
         })
     }
@@ -126,12 +126,12 @@ let DataLoad = function() {
     this.singleQuery = (sql, callBack) => {
         let {pool, connStr} = this;
         let result;
-        this.connNum++;
+        //this.connNum++;
         pool.open(connStr, (err, conn) => {
             result = this.runSQL(conn, sql);
             if(callBack) callBack(result);
             conn.close();
-            this.connNum--;
+            //this.connNum--;
         });
     }
 
@@ -193,7 +193,7 @@ let DataLoad = function() {
     this.getInventorySQL = () => {
         let sqls = [];
         let getRandomInt = this.getRandomInt;
-        for(let i=0;i<100;i++){
+        for(let i=0;i<300;i++){
             let sql = "INSERT INTO \"WEBSTORE\".\"INVENTORY\" (\"INV_QUANTITY_ON_HAND\") VALUES(" + getRandomInt(0, 1000) + ")"
             sqls.push(sql);
         }

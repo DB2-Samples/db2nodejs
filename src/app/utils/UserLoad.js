@@ -1,8 +1,8 @@
 'use strict';
 const async = require('async');
 
-let minTimeout = 3000;	// Minimum amount of time between customer actions
-let maxTimeout = 10000;
+let minTimeout = 1000;	// Minimum amount of time between customer actions
+let maxTimeout = 3000;
 
 let UserLoad = function() {
 
@@ -25,7 +25,8 @@ let UserLoad = function() {
         if(funcs.startCall && funcs.successCall && funcs.errorCall && this.id){
             let {startCall, successCall, errorCall} = funcs;
             let id = this.id;
-            result = {query:sql, startCall: startCall(id), successCall: successCall(id), errorCall: errorCall(id)};
+            let name = this.name;
+            result = {query:sql, startCall: startCall(id, name), successCall: successCall(id, name), errorCall: errorCall(id, name)};
             return result;
         }
         else return sql
@@ -47,17 +48,25 @@ let UserLoad = function() {
 
     this.loginCallBack = (result) => {
         let user = result[0];
-        this.name = user.C_SALUTATION + user.C_LAST_NAME;
+        this.name = user.C_SALUTATION + " " + user.C_LAST_NAME;
         this.user = user;
-        if (this.decideBuy(8)) {
-            this.jsonStuff();
+        let logout = () => {
+            if(this.callBackFuncs && this.callBackFuncs.endCall)
+                this.callBackFuncs.endCall(this.id, this.name)();
         }
-        else if (this.decideBuy(7)) {
-            this.alterOrder();
+        let layBack = () => {
+            if (this.decideBuy(8)) {
+                this.jsonStuff();
+            }
+            else if (this.decideBuy(7)) {
+                this.alterOrder();
+            }
+            else {
+                this.browse();
+            }
+            this.delayQuery(logout);
         }
-        else {
-            this.browse();
-        }
+        this.delayQuery(layBack);
     }
 
     this.logout = (id) => {
@@ -79,10 +88,10 @@ let UserLoad = function() {
         let {user, getRandomInt} = this;
         let page = getRandomInt(1,3);
 
-        let browseCallBack = (result) => {
+        let browseCallBack = (result) => this.delayQuery(() => {
             let rows = result;
             this.buy(rows);
-        }
+        });
 
         let execute = () => {
             let sql = "select * from WEBSTORE.INVENTORY where INV_QUANTITY_ON_HAND > 0 order by RAND() fetch first 9 rows only";
@@ -112,14 +121,14 @@ let UserLoad = function() {
 
     this.alterOrder = () => {
         let {user} = this;
-        let alterCallBack = (result) => {
+        let alterCallBack = (result) => this.delayQuery(() => {
             let order = result[0];
             if (order&&order.WS_ORDER_NUMBER) {
                 if (this.decideBuy(6))
                     this.cancelOrder(order);
                 else this.updateOrder(order);
             }
-        }
+        });
         let execute = () => {
             let sql = "select * from WEBSTORE.WEBSALES where WS_CUSTOMER_SK = " + user.C_CUSTOMER_SK + " order by RAND() fetch first 1 rows only";
             sql = this.tryCallBack(sql, "alterorder");
