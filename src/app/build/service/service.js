@@ -114,7 +114,7 @@ function startPool(container){
     }
 
     this.generateMetric = function() {
-        var content = "<div><span>Queries per Second:</span><span id='queryPSec'></span></div><div><span>Total queries:</span><span id='totalQr'>0</span></div>";
+        var content = "<div><span >Queries per Second:</span><span id='queryPSec'></span></div><div><span>Total queries:</span><span id='totalQr'>0</span></div>";
         return content;
     }
 

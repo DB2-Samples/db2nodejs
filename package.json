@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node ./src/app/index.js",
-    "start": "node ./src/app/utils/index.js",
-    "populate": "node ./src/app/utils/populate.js"
+    "start": "node ./src/app/index.js"
+  // "start": "node ./src/app/utils/index.js",
+    //"populate": "node ./src/app/utils/populate.js"
   },
   "author": "mkhattab",
   "license": "ISC",

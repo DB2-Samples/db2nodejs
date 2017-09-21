@@ -1,8 +1,8 @@
 'use strict';
 const async = require('async');
 
-let minTimeout = 1000;	// Minimum amount of time between customer actions
-let maxTimeout = 3000;
+let minTimeout = 3000;	// Minimum amount of time between customer actions
+let maxTimeout = 5000;
 
 let UserLoad = function() {
 

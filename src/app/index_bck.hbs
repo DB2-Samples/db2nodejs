@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="build/iconFonts/iconFonts.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="build/jquery.min.js"></script>
-    <script src="service/service.js"></script>
+    <script src="build/service/service.js"></script>
     <style>
         body{position: relative;overflow: hidden;}
         .main {
@@ -342,9 +342,17 @@
         }
 
         params.num = num;
-        params.purSize = parseInt(document.getElementById("purSize").value);
-        params.custSize = parseInt(document.getElementById("custSize").value);
+        params.purSize = parseInt(document.getElementById("purSize").value)||5;
+        params.custSize = parseInt(document.getElementById("custSize").value)||2;
 
+        if(!reg.test(params.purSize)){
+            alert("Please enter a digit number");
+            return ;
+        }
+        if(!reg.test(params.custSize)){
+            alert("Please enter a digit number");
+            return ;
+        }
         socket.emit('start', params);
         //buildRetailer(num);
         startPoolling(params.purSize, params.custSize);
@@ -459,6 +467,7 @@
             node.parentNode.className = classes + " collapse";
         }
     }
+
 </script>
 </body>
 </html>
