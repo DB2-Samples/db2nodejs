@@ -97,7 +97,7 @@ The mock workload simulates continuous three types of user behaviours.
 The parallel user number and polling cycle length will impact the workload pressure.
 polling cycle length is set as hard code in src/app/utils/UserLoad.js (line 4-5)
 
-For front-end effect smoothness, we recommend the ratio of parallel user number to average polling cycle length less than 40/second.
+For front-end effect smoothness, we recommend the ratio of parallel user number to average polling cycle length less than 40/second, or the front end page may encounter critical performance issue.
 
 All the source code are under folder
     src/app
