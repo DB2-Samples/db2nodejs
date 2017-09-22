@@ -100,6 +100,7 @@ polling cycle length is set as hard code in src/app/utils/UserLoad.js (line 4-5)
 For front-end effect smoothness, we recommend the ratio of parallel user number to average polling cycle length less than 40/second, or the front end page may encounter critical performance issue.
 
 All the source code are under folder
+
     `src/app/build - contains front end dependencied js code.`
     
     `src/app/utils - contains back end code.`
