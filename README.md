@@ -101,9 +101,13 @@ For front-end effect smoothness, we recommend the ratio of parallel user number 
 
 All the source code are under folder
     `src/app/build - contains front end dependencied js code.`
+    
     `src/app/utils - contains back end code.`
+    
     `src/app/index.html - login page`
+    
     `src/app/index.js - startup js file`
+    
     `src/app/user.hbs - user control page.`
 
 
