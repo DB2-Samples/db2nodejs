@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="build/iconFonts/iconFonts.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="build/jquery.min.js"></script>
-    <script src="service/service.js"></script>
+    <script src="build/service/service.js"></script>
     <style>
         body{position: relative;overflow: hidden;}
         .main {
@@ -39,17 +39,17 @@
         .main-screen{
             overflow: auto;
             padding: 10px;
-            color: white;
+            color: black;
         }
         .credential, .client-control{
-            border-bottom: 1px solid #aaa;
+            border-bottom: 1.5px solid #5FC5BA;
             padding:10px 20px;
             display: block;
         }
         .credential.collapse,.client-control.collapse{
             height: 50px;
             overflow: hidden;
-            background-color: #eee;
+            background-color:#1D3649;
         }
         .credential h4, .client-control h4{
             margin-bottom: 20px;
@@ -90,12 +90,12 @@
             display: inline-block;
             height:20px;
             width:20px;
-            border: 1px solid #41d6c3;
+            border: 1px solid #152935;
             margin-right: 1px;
             background-color: white;
         }
         .size.block{
-            background-color: #41d6c3;
+            background-color: #152935;
         }
         .btn.mockUser:before{
             font-family: 'iconFonts' !important;
@@ -163,6 +163,12 @@
         #okBtn{
             margin-left: 100px;
         }
+        .bg-dark{
+            background-color: #152935!important;
+        }
+        .bg-secondary{
+            background-color: white!important;
+        }
     </style>
 </head>
 <body>
@@ -183,19 +189,19 @@
         <button type="button" id="cancelBtn" class="btn btn-dark" data-dismiss="alert">Cancel</button>
     </div>
     <div class="main">
-        <span style="width: 30%;" class="left-control bg-light">
+        <span style="width: 25%; background-color:#1D3649!important;color: white;" class="left-control bg-light">
             <div class="credential">
                 <h4 onclick="javascript:toggleCollapse(this)">Db2 Credential<span class="displayIcon iconF-arrow_up"></span></h4>
                    <div class="row form-group">
-                        <div class="col-7">
-                            <span>IP Address/Domain</span>
-                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="hostname" value="{{hostname}}" name="hostname" type="text" class="form-control" placeholder="Host name">
-                        </div>
+                       <div class="col-7">
+                       <span>IP Address/Domain</span>
+                       <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="hostname" value="{{hostname}}" name="hostname" type="text" class="form-control" placeholder="Host name">
+                       </div>
                         <div class="col-5">
-                            <span>Port</span>
-                            <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="port" value="{{port}}" name="port" type="number" class="form-control" placeholder="Port">
+                        <span>Port</span>
+                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" id="port" value="{{port}}" name="port" type="number" class="form-control" placeholder="Port">
                         </div>
-                    </div>
+                   </div>
                   <div class="form-group">
                         <span>Database name</span>
                         <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="text" style="text-transform:uppercase;" class="form-control" value="{{db}}" id="dbname" name="dbname" aria-describedby="emailHelp" placeholder="DB name ">
@@ -209,11 +215,15 @@
                         <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="password" id="dbpassword" value="{{password}}" name="dbpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
                   </div>
                     <div>
-                        <button onclick="test()" type="submit" class="btn btn-primary">Test connection</button>
+                        <p style="text-align: center">
+                        <button onclick="test()" type="submit" class="btn btn-info" style="width:220px">Test connection</button>
+                        </p>
                     </div>
                     <div>
-                        <button onclick="confirmLoad()" class="btn btn-primary">Load data</button>
-                        <button onclick="confirmClean()" class="btn btn-danger">Clear data</button>
+                        <p style="text-align: center">
+                        <button onclick="confirmLoad()" class="btn btn-info">Load data</button>
+                        <button onclick="confirmClean()" class="btn btn-info">Clear data</button>
+                        </p>
                     </div>
             </div>
             <div class="client-control collapse">
@@ -230,13 +240,20 @@
                         <span>Parrallel user number</span>
                         <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="User number">
                     </div>
-                 <button type="button" onclick="start()" class="btn btn-primary">START</button>
-                  <button type="button" onclick="stop()" class="btn btn-danger">STOP</button>
+                <p style="text-align: center">
+                 <button type="button" onclick="start()" class="btn btn-info">START</button>
+                  <button type="button" onclick="stop()" class="btn btn-info">STOP</button>
+                </p>
             </div>
         </span>
-        <span style="width: 70%;" id="demo" class="main-screen bg-secondary">
+        <div>
+            <div style="width: 75%;" class="main-screen bg-secondary">
+                <h2><i>Welcome to the DB2 NodeJS Mock Webstore</i></h2>
+            <span style="width: 100%;" id="demo" class="main-screen bg-secondary">
 
-        </span>
+            </span>
+            </div>
+        </div>
     </div>
 <script>
     var i = 1;
@@ -342,9 +359,17 @@
         }
 
         params.num = num;
-        params.purSize = parseInt(document.getElementById("purSize").value);
-        params.custSize = parseInt(document.getElementById("custSize").value);
+        params.purSize = parseInt(document.getElementById("purSize").value)||5;
+        params.custSize = parseInt(document.getElementById("custSize").value)||2;
 
+        if(!reg.test(params.purSize)){
+            alert("Please enter a digit number");
+            return ;
+        }
+        if(!reg.test(params.custSize)){
+            alert("Please enter a digit number");
+            return ;
+        }
         socket.emit('start', params);
         //buildRetailer(num);
         startPoolling(params.purSize, params.custSize);
@@ -459,6 +484,7 @@
             node.parentNode.className = classes + " collapse";
         }
     }
+
 </script>
 </body>
 </html>

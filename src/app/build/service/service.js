@@ -113,8 +113,12 @@ function startPool(container){
         return title;
     }
 
+    this.Title = function(){
+        var Title = "<h2>hello</h2>";
+        return Title;
+    }
     this.generateMetric = function() {
-        var content = "<div><span>Queries per Second:</span><span id='queryPSec'></span></div><div><span>Total queries:</span><span id='totalQr'>0</span></div>";
+        var content = "<div ><span style=\"width:50%;display:inline-block\">Queries per Second:</span><span id='queryPSec'></span></div><div><span style=\"width:50%;display:inline-block\">Total queries:</span><span id='totalQr'>0</span></div>";
         return content;
     }
 

@@ -80,7 +80,7 @@ socketIO.on('connection', function (socket) {
                 socketIO.to(newUserID).emit('sys', 'nodata');
             }
         }
-        pop.initPool(cred, 1, true);
+        pop.initPool(cred, 1, false);
         pop.testMockData(run);
     });
 

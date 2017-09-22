@@ -149,6 +149,7 @@ let DataLoad = function() {
                 console.log(num);
                 if(parseInt(num)>0){
                     exist = 1;
+                    console.log("success");
                     if(callBack && callBack.success) callBack.success();
                 }
                 else{
