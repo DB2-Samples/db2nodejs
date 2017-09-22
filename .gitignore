@@ -2,3 +2,4 @@ node_modules/
 npm-debug.log
 src/app/config/
 .idea/
+package-lock.json
