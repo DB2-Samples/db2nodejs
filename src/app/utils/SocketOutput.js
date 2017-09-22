@@ -6,11 +6,7 @@ let Output = function (Socket, Cmd, Uid) {
         result.timestamp = Date.parse(new Date()).toString().substr(0,10);
         this.resultList.push(result);
         let qrResult = this.formatMetric();
-        //result.qrPS = qrResult.qrPS;
-        if(this.lastTimeStamp!=qrResult.timestamp||result.qrPS>this.lastQrSpeed) {
-            this.lastQrSpeed = result.qrPS = qrResult.qrPS;
-             this.lastTimeStamp = qrResult.timestamp;
-        }
+        result.qrPS = qrResult;
         return JSON.stringify(result);
     }
 
@@ -18,13 +14,11 @@ let Output = function (Socket, Cmd, Uid) {
         let lastOne = this.resultList[this.resultList.length-1];
         let qrPS = 0;
         this.resultList = this.resultList.filter((item)=>{
-            if(parseInt(item.timestamp)<parseInt(lastOne.timestamp)-2) return false;
-            if(parseInt(item.timestamp)>=parseInt(lastOne.timestamp)-2
-            &&parseInt(item.timestamp)<=parseInt(lastOne.timestamp)-1)
-                qrPS += parseInt(item.queryNum);
+            if(parseInt(item.timestamp)<parseInt(lastOne.timestamp)-1) return false;
+            qrPS += parseInt(item.queryNum);
             return true;
         });
-        return {qrPS,timestamp: lastOne.timestamp};
+        return qrPS;
     }
 
     this.generateCallback = (state) => (id, username) => (connNum, queryNum) => {
@@ -51,8 +45,6 @@ let Output = function (Socket, Cmd, Uid) {
         }
         result.endCall = this.endCall;
         this.resultList = [];
-        this.lastTimeStamp = "";
-        this.lastQrSpeed = 0;
         return result;
     }
 

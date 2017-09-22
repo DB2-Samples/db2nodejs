@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/app/index.js"
+    "start": "node ./src/app/index.js",
+    "debug": "node ./src/app/index.js product=true"
   },
   "author": "mkhattab",
   "license": "ISC",

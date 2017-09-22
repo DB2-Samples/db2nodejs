@@ -31,7 +31,11 @@ Setting up the database
 Setting up the app
 Start your app locally with the following command
 
-    npm run test
+    npm run start
+
+Start your app locally in odbc debug mode with the following command
+
+    npm run debug
 
 The app will be launched at http://localhost:8888/
 
@@ -94,5 +98,14 @@ The parallel user number and polling cycle length will impact the workload press
 polling cycle length is set as hard code in src/app/utils/UserLoad.js (line 4-5)
 
 For front-end effect smoothness, we recommend the ratio of parallel user number to average polling cycle length less than 40/second.
+
+All the source code are under folder
+    src/app
+        |--build - contains front end dependencied js code.
+        |--utils - contains back end code.
+        |--index.html - login page
+        |--index.js - startup js file
+        |--user.hbs - user control page.
+
 
 

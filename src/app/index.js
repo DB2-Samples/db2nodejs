@@ -3,9 +3,9 @@ var express = require('express');
 var path = require('path');
 var IO = require('socket.io');
 var router = express.Router();
-var usersCred = new require('./utils/user_cred').users;
+var usersCred = require('./utils/FileHandler').users;
 
-var ConnectionPool = require("./utils/connectionPool").connectionPool;
+var ConnectionPool = require("./utils/ConnectionPool").connectionPool;
 var dbDriver = require("./utils/DataLoad").dataLoad;
 
 var app = express();
@@ -16,7 +16,13 @@ app.set('view engine', 'hbs');
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'hbs');
 
+var args = process.argv.splice(2)
 
+var product = true;
+if(args.length>=1){
+    if(args[0]=="product=true")
+        product = false;
+}
 
 // 创建socket服务
 var socketIO = IO(server);
@@ -45,8 +51,7 @@ socketIO.on('connection', function (socket) {
 
     socket.on('start', function (params) {
 
-        socket.join(newUserID);    // 加入房间
-        // 通知房间内人员
+        socket.join(newUserID);
         var num = parseInt(params.num);
         var purSize = parseInt(params.purSize)||5;
         var custSize = parseInt(params.custSize)||2;
@@ -56,7 +61,7 @@ socketIO.on('connection', function (socket) {
         var cred = params;
         dbCredList[userID] = cred;
         usersCredList.write(dbCredList);
-        console.log(userID + '加入了');
+        console.log(userID + 'join');
 
         let pop = new dbDriver();
         let run = {
@@ -80,7 +85,7 @@ socketIO.on('connection', function (socket) {
                 socketIO.to(newUserID).emit('sys', 'nodata');
             }
         }
-        pop.initPool(cred, 1, false);
+        pop.initPool(cred, 1, product);
         pop.testMockData(run);
     });
 
@@ -102,12 +107,10 @@ socketIO.on('connection', function (socket) {
             delete userAuth[userID];
         }
         socket.leave(newUserID);
-        // 通知房间内人员
-        socketIO.to(newUserID).emit('sys', userID + '退出了房间');
-        console.log(userID + '加入了退出了房间');
+        socketIO.to(newUserID).emit('sys', userID + 'signs out');
+        console.log(userID + 'signs out');
     });
 
-    // 接收用户消息,发送相应的房间
     socket.on('message', function (msg) {
     });
 
@@ -238,7 +241,7 @@ router.get('/:userID', function (req, res) {
         let cred = {hostname: "", port: "", db: "", username: "", password: ""};
         if (dbCredList[userID]) cred = dbCredList[userID]
         let hostname = cred.hostname, port = cred.port, db = cred.db, username = cred.username, password = cred.password;
-        res.render('index_bck', {
+        res.render('user', {
             userID: userID,
             hostname, port, db, username, password
         });

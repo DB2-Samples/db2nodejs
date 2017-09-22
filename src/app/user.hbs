@@ -189,7 +189,7 @@
         <button type="button" id="cancelBtn" class="btn btn-dark" data-dismiss="alert">Cancel</button>
     </div>
     <div class="main">
-        <span style="width: 25%; background-color:#1D3649!important;color: white;" class="left-control bg-light">
+        <span style="width: 28%; background-color:#1D3649!important;color: white;" class="left-control bg-light">
             <div class="credential">
                 <h4 onclick="javascript:toggleCollapse(this)">Db2 Credential<span class="displayIcon iconF-arrow_up"></span></h4>
                    <div class="row form-group">
@@ -215,45 +215,34 @@
                         <input onclick="checkValid(this,true)" onblur="checkValid(this)" type="password" id="dbpassword" value="{{password}}" name="dbpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
                   </div>
                     <div>
-                        <p style="text-align: center">
-                        <button onclick="test()" type="submit" class="btn btn-info" style="width:220px">Test connection</button>
-                        </p>
+                        <button onclick="test()" type="submit" class="btn btn-info" style="width:100%;margin:0;">Test connection</button>
                     </div>
                     <div>
-                        <p style="text-align: center">
-                        <button onclick="confirmLoad()" class="btn btn-info">Load data</button>
-                        <button onclick="confirmClean()" class="btn btn-info">Clear data</button>
-                        </p>
+                        <span style="display: inline-block; width: 50%; padding: 16px 10px 8px 0px;"><button onclick="confirmLoad()" class="btn btn-info" style="margin:0px;width:100%;">Load data</button></span><span style="display: inline-block; width: 50%; padding: 16px 0px 10px 8px;"><button onclick="confirmClean()" class="btn btn-danger" style="margin:0px;width:100%;">Clear data</button></span>
                     </div>
             </div>
             <div class="client-control collapse">
                 <h4 onclick="javascript:toggleCollapse(this)">App Control Panel<span class="displayIcon iconF-arrow_up"></span></h4>
-                    <div class="form-group">
-                        <span>Limit for Purchasing pool</span>
-                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="purSize" type="number" aria-describedby="emailHelp" placeholder="Connection number - default 5">
-                    </div>
-                    <div class="form-group">
-                        <span>Limit for customer service pool</span>
-                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="custSize" type="number" aria-describedby="emailHelp" placeholder="Connection number - default 2">
-                    </div>
-                    <div class="form-group">
-                        <span>Parrallel user number</span>
-                        <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="User number">
-                    </div>
-                <p style="text-align: center">
-                 <button type="button" onclick="start()" class="btn btn-info">START</button>
-                  <button type="button" onclick="stop()" class="btn btn-info">STOP</button>
-                </p>
+                <div class="form-group">
+                    <span>Limit for Purchasing pool</span>
+                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="purSize" type="number" aria-describedby="emailHelp" placeholder="Connection number - default 5">
+                </div>
+                <div class="form-group">
+                    <span>Limit for customer service pool</span>
+                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="custSize" type="number" aria-describedby="emailHelp" placeholder="Connection number - default 2">
+                </div>
+                <div class="form-group">
+                    <span>Parrallel user number</span>
+                    <input onclick="checkValid(this,true)" onblur="checkValid(this)" class="form-control" id="clientnumber" type="number" aria-describedby="emailHelp" placeholder="User number">
+                </div>
+                <div>
+                    <span style="display: inline-block; width: 50%; padding: 16px 10px 8px 0px;"><button type="button" onclick="start()" class="btn btn-info" style="margin:0px;width:100%;">START</button></span><span style="display: inline-block; width: 50%; padding: 16px 0px 10px 8px;"><button type="button" onclick="stop()" style="margin:0px;width:100%;" class="btn btn-danger">STOP</button></span>
+                </div>
             </div>
         </span>
-        <div>
-            <div style="width: 75%;" class="main-screen bg-secondary">
-                <h2><i>Welcome to the DB2 NodeJS Mock Webstore</i></h2>
-            <span style="width: 100%;" id="demo" class="main-screen bg-secondary">
+        <span style="width: 72%;" id="demo" class="main-screen bg-secondary">
 
-            </span>
-            </div>
-        </div>
+        </span>
     </div>
 <script>
     var i = 1;
@@ -273,6 +262,12 @@
     socket.on('connect', function () {
 
     });
+
+    function checkUnsigned(input){
+        if(parseInt(input.value)&&parseInt(input.value)<0){
+            input.value = 0;
+        }
+    }
 
     function buildRetailer(num){
         document.getElementById('demo').innerHTML = "";
@@ -304,13 +299,13 @@
         var pane2 = document.getElementById("pool1");
 
         if(result.qrPS && result.queryNum){
-            startp.setMetric(parseInt(result.qrPS), parseInt(result.queryNum));
+            startp.setMetric(parseInt(result.qrPS), parseInt(result.queryNum), result.timestamp);
         }
 
         if(result.resultCode){
             startp.userSignOut(pane1, pane2, result.userid);
             startp.setDash(0, 0);
-            startp.setMetric(0,0);
+            startp.setMetric(0,0,null);
             return ;
         }
 

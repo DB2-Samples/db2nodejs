@@ -99,6 +99,7 @@ function startPool(container){
             +that.createPool(label2, 1);
         that.container.innerHTML = content;
         that.startTime = Date.parse(new Date()).toString().substr(0,10);
+        this.speed = {};
     }
 
     this.generateTopBanner = function(){
@@ -151,11 +152,22 @@ function startPool(container){
         if(size2!==undefined) loop(panel2, size2);
     }
 
-    this.setMetric = function(qPS, delTa){
+    this.setMetric = function(qPS, delTa, timestamp){
         var qpsC = $('#queryPSec')[0];
         var totalQ = $('#totalQr')[0];
         totalQ.innerHTML = parseInt(totalQ.innerHTML) + delTa;
-        qpsC.innerHTML = qPS;
+        if(timestamp){
+            if(!this.speed || !this.speed[timestamp]){
+                qpsC.innerHTML = qPS;
+                if(!this.speed) this.speed = {};
+                this.speed[timestamp] = qPS;
+            }
+            else if(qPS > this.speed[timestamp]){
+                qpsC.innerHTML = qPS;
+                this.speed[timestamp] = qPS;
+            }
+        }
+        else qpsC.innerHTML = qPS;
     }
 
     this.userSignIn = function(pane, user){
