@@ -13,7 +13,7 @@ Requires Db2 version 11.1.2.2
 
 Installing up the app
 
-    Clone the app to your local environment from your terminal using the following command:
+1.    Clone the app to your local environment from your terminal using the following command:
 
     git clone https://github.com:LarryKX/db2nodejs.git
 
@@ -45,7 +45,7 @@ The app will be launched at http://localhost:8888/
 Db2 NodeJS Mock Webstore contains such functions as
 user management, Db2 connection management and mock workload.
 
-    Sign In/Sign Up - User Management
+ 1.   Sign In/Sign Up - User Management
 
     When first access this site, it will direct to the login page, providing service of user registration and authentication.
 
@@ -61,7 +61,7 @@ user management, Db2 connection management and mock workload.
     The application will create one schema named WEBSTORE and four table WEBSTORE.CUSTOMER, WEBSTORE.INVENTORY, WEBSTORE.WEBSALES, WEBSTORE.TESTJSON.
 
 
-3.  Mock Workload
+3.    Mock Workload
 
     This demo workload will be controlled by three arguments.
 
