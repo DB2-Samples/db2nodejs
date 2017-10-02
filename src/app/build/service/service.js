@@ -92,7 +92,7 @@ function startPool(container){
 
     this.init = function(size1, size2, label1, label2){
         var that = this;
-        this.historyMax = 1;
+        this.historyMax = 0;
         that.container.innerHTML = "";
         var content = that.generateTopBanner()
             +that.getDashboard(label1+" connection number:", size1)
@@ -148,6 +148,7 @@ function startPool(container){
     this.refreshUserMetrics = function(data) {
         if(data.purConnNum !== undefined && data.custConnNum !== undefined) this.setDash(parseInt(data.purConnNum), parseInt(data.custConnNum));
         if(data.qrPS !== undefined && data.queryNum !== undefined) this.setMetric(parseInt(data.qrPS), parseInt(data.queryNum));
+        if(this.historyMax == 0) this.historyMax = data.qrPS;
         if(data.outputArray){
             for(var key in data.outputArray){
                 this.refreshBar(key, data.outputArray[key]);
@@ -170,7 +171,7 @@ function startPool(container){
             if(ele>0){
                 var minWid = (ele+"").length *14 + "px";
                 $(key).css("min-width", minWid);
-            }
+            }else $(key).css("min-width", "0px");
         }
         document.getElementById(id+"TotalNum").innerHTML = total;
     }
