@@ -9,9 +9,10 @@ let UserLoad = function() {
     // this.minTimeout = minTimeout;
     // this.maxTimeout = maxTimeout;
 
-    this.init = (purchasingPool, customerServicePool) => {
+    this.init = (purchasingPool, customerServicePool, rotateSetting) => {
         this.purchasingPool = purchasingPool;
         this.customerServicePool = customerServicePool;
+        if(rotateSetting) this.rotateSetting = rotateSetting;
     }
 
     // this.getRandomInt = (minimum, maximum) => {
@@ -40,6 +41,7 @@ let UserLoad = function() {
     }
 
     this.login = (id) => {
+        if(this.rotateSetting) this.rotateSetting(false)();
         this.id = id;
         let sql = "select * from WEBSTORE.CUSTOMER order by RAND() fetch first 1 rows only";
         sql = this.tryCallBack(sql, "login");
@@ -50,10 +52,6 @@ let UserLoad = function() {
         let user = result[0];
         this.name = user.C_SALUTATION + " " + user.C_LAST_NAME;
         this.user = user;
-        let logout = () => {
-            if(this.callBackFuncs && this.callBackFuncs.endCall)
-                this.callBackFuncs.endCall(this.id, this.name)();
-        }
         let layBack = () => {
             if (this.decideBuy(8)) {
                 this.jsonStuff();
@@ -68,10 +66,10 @@ let UserLoad = function() {
         this.delayQuery(layBack);
     }
 
-    this.logout = () => setTimeout(() => {
+    this.logout = () => {if(this.rotateSetting) this.rotateSetting(true)();}/*setTimeout(() => {
         if(this.callBackFuncs && this.callBackFuncs.endCall)
             this.callBackFuncs.endCall(this.id, this.name)();
-    }, 1000);
+    }, 1000);*/
 
     this.behaviour = (id, callBackFuncs) => {
         this.callBackFuncs = callBackFuncs;
@@ -177,18 +175,29 @@ let UserLoad = function() {
 
 let UserRotate = function() {
 
-    this.stop = () => {this.keepRun = false;}
+    this.stop = () => {this.keepRun = false;this.stoppedNum = 0;}
 
     this.autoStop = (end) => {this.endTime = end;}
 
-    this.start = (id, purchasingPool, customerServicePool, endTime, callBackFuncs) => {
+    this.setRotate = (tf) => () => {
+        this.endRotate = tf;
+        if(!this.keepRun && this.addToStopList){
+            this.addToStopList();
+        }
+    }
+
+    this.start = (id, purchasingPool, customerServicePool, endTime, callBackFuncs, addToStopList) => {
         this.endTime = endTime;
         this.keepRun = true;
+        this.endRotate = false;
+        this.addToStopList = addToStopList;
         let execute = (cid) => {
             let user = new UserLoad();
-            user.init(purchasingPool, customerServicePool);
+            user.init(purchasingPool, customerServicePool, this.setRotate);
             user.behaviour(cid, callBackFuncs);
         }
+        if(callBackFuncs && callBackFuncs.startCall) callBackFuncs.startCall();
+
         let i = 0;
         async.whilst(
             () => {
@@ -202,6 +211,7 @@ let UserRotate = function() {
             },
             (err)=>{
                 console.log(id+"users stopped.");
+                //if(callBackFuncs && callBackFuncs.endCall) callBackFuncs.endCall();
             }
         )
     }

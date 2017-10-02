@@ -88,8 +88,11 @@ function startPool(container){
 
     this.container = container;
 
+    this.historyMax = 1;
+
     this.init = function(size1, size2, label1, label2){
         var that = this;
+        this.historyMax = 1;
         that.container.innerHTML = "";
         var content = that.generateTopBanner()
             +that.getDashboard(label1+" connection number:", size1)
@@ -121,6 +124,57 @@ function startPool(container){
     this.generateMetric = function() {
         var content = "<div ><span style=\"width:50%;display:inline-block\">Queries per Second:</span><span id='queryPSec'></span></div><div><span style=\"width:50%;display:inline-block\">Total queries:</span><span id='totalQr'>0</span></div>";
         return content;
+    }
+
+    this.initUserMetrics = function(data, purPane, custPane) {
+        var purPoolContent = "";
+        var custPoolContent = "";
+        for(var key in data){
+            var containerPre = '<div id="'+key+'Container" class="queryContainer"><span class="queryLabel">'+data[key][0].split('-')[0]+'</span><span class="queryBarContainer">';
+            var containerEd = '<span id="'+key+'TotalNum" class="queryNum">0</span></span></div>';
+            var content = "";
+            var pur = true;
+            if(data[key][0].split('-').length>2) pur = false;
+            for(var i = 0; i < data[key].length;i++){
+                content += '<span id="'+key+i+'Bar" class="queryBar'+i+'"></span>';
+            }
+            if(pur) purPoolContent += containerPre + content + containerEd;
+            else custPoolContent += containerPre + content + containerEd;
+        }
+        purPane.innerHTML = purPoolContent;
+        custPane.innerHTML = custPoolContent;
+    }
+
+    this.refreshUserMetrics = function(data) {
+        if(data.purConnNum !== undefined && data.custConnNum !== undefined) this.setDash(parseInt(data.purConnNum), parseInt(data.custConnNum));
+        if(data.qrPS !== undefined && data.queryNum !== undefined) this.setMetric(parseInt(data.qrPS), parseInt(data.queryNum));
+        if(parseInt(data.qrPS)>this.historyMax) this.historyMax = parseInt(data.qrPS);
+        if(data.outputArray){
+            for(var key in data.outputArray){
+                this.refreshBar(key, data.outputArray[key]);
+            }
+        }
+    }
+
+    this.refreshBar = function(id, data) {
+        let total = 0;
+        for(var i = 0; i < data.length; i++){
+            total+=data[i];
+        }
+        for(var i = 0; i < data.length; i++){
+            var ele = data[i];
+            var len = (ele*100)/this.historyMax;
+            if(total>0 && len > (ele*100)/total) len = (ele*100)/total;
+            var key = '#' + id + i + 'Bar';
+            $(key).css("width", len);
+            $(key).html(ele==0?"":ele);
+        }
+        document.getElementById(id+"TotalNum").innerHTML = total;
+    }
+
+    this.setWidth4Bar = function(key, data){
+        var total = 0;
+        data.forEach(function(item){total+=item});
     }
 
     this.getDashboard = function(title, size){

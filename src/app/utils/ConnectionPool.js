@@ -30,6 +30,7 @@ let ConnectionPool = function () {
 
     this.start = (cred, size1, size2, clientNum, endTime) => {
         this.init(cred, size1, size2);
+        this.countStop = 0;
 
         let callBackFuncs;
         if(this.socketOutput){
@@ -39,8 +40,18 @@ let ConnectionPool = function () {
         this.userList = [];
         for(let i = 0; i < clientNum; i++){
             let user = new Users();
-            user.start(i, this.purchasingPool, this.custServicePool, endTime, callBackFuncs);
+            user.start(i, this.purchasingPool, this.custServicePool, endTime, callBackFuncs, this.addToStopList);
             this.userList.push(user);
+        }
+    }
+
+    this.addToStopList = () => {
+        if(!this.countStop) this.countStop = 0;
+        this.countStop ++;
+        if(this.countStop >= this.userList.length){
+            if(this.socketOutput) {
+                this.socketOutput.endCall();
+            }
         }
     }
 

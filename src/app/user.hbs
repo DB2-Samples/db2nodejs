@@ -16,6 +16,41 @@
             width: 100%;
             overflow: hidden;
         }
+        .queryBarContainer{width:60%;}
+        .queryLabel{
+            width:30%;
+        }
+        .queryBar0, .queryBar1, .queryBar2{
+            height:16px;
+            background-color: #6eedd8;
+            vertical-align: bottom;
+            text-align: center;
+            color: #4178be;
+            line-height: 16px;
+            font-size: 14px;
+            -webkit-transition: width .5s;
+            -moz-transition: width .5s;
+            -ms-transition: width .5s;
+            -o-transition: width .5s;
+            transition: width .5s;
+        }
+        .queryNum{margin: 0 10px;}
+        .queryBar0{
+            min-width:10px;
+        }
+        .queryBar1{
+            background-color: #41d6c3;
+        }
+        .queryBar2{
+            background-color: #a6266e;
+        }
+        .queryContainer span {
+            display: inline-block;
+        }
+        .queryContainer {
+            font-size: 16px;
+            line-height: 16px;
+        }
         .blur{
             -webkit-filter: blur(5px); /* Chrome, Opera */
             -moz-filter: blur(5px);
@@ -298,45 +333,43 @@
         var pane1 = document.getElementById("pool0");
         var pane2 = document.getElementById("pool1");
 
-        if(result.qrPS && result.queryNum){
-            startp.setMetric(parseInt(result.qrPS), parseInt(result.queryNum), result.timestamp);
+        if(result.qrPS !== undefined && result.queryNum !== undefined){
+            //startp.setMetric(parseInt(result.qrPS), parseInt(result.queryNum), result.timestamp);
+            startp.refreshUserMetrics(result);
         }
 
-        if(result.resultCode){
-            startp.userSignOut(pane1, pane2, result.userid);
-            startp.setDash(0, 0);
-            startp.setMetric(0,0,null);
-            return ;
+        else if(result.data){
+            startp.initUserMetrics(result.data, pane1, pane2);
         }
 
-        var states = result.state.split("-");
-
-        if(states[1]=="start"){
-            result.state = states[0];
-            var connNum = parseInt(result.connNum)||0;
-            startp.userSignIn(pane1, result);
-            startp.setDash(connNum, 0);
-        }
-        else {
-            var left = states[1] == "process" ? 3 : 8;
-            var success = states[1] == "error" ? -1 : (states[1] == "success" ? 1 : 0);
-            var name = (!result.username||result.username=="undefined")?"":result.username+" ";
-            var label = name+states[0];
-            var connNum = parseInt(result.connNum)||0;
-            if (states.length >= 4) {
-                startp.transfer(pane1, pane2, result.userid);
-                startp.moveUser(pane2, result.userid, 0, 0, label);
-                startp.setDash(undefined, connNum);
-            }
-            else if (states.length == 3) {
-                startp.moveUser(pane2, result.userid, left, success, label);
-                startp.setDash(undefined, connNum);
-            }
-            else if(states.length==2){
-                startp.moveUser(pane1, result.userid, left, success, label);
-                startp.setDash(connNum, 0);
-            }
-        }
+//        var states = result.state.split("-");
+//
+//        if(states[1]=="start"){
+//            result.state = states[0];
+//            var connNum = parseInt(result.connNum)||0;
+//            startp.userSignIn(pane1, result);
+//            startp.setDash(connNum, 0);
+//        }
+//        else {
+//            var left = states[1] == "process" ? 3 : 8;
+//            var success = states[1] == "error" ? -1 : (states[1] == "success" ? 1 : 0);
+//            var name = (!result.username||result.username=="undefined")?"":result.username+" ";
+//            var label = name+states[0];
+//            var connNum = parseInt(result.connNum)||0;
+//            if (states.length >= 4) {
+//                startp.transfer(pane1, pane2, result.userid);
+//                startp.moveUser(pane2, result.userid, 0, 0, label);
+//                startp.setDash(undefined, connNum);
+//            }
+//            else if (states.length == 3) {
+//                startp.moveUser(pane2, result.userid, left, success, label);
+//                startp.setDash(undefined, connNum);
+//            }
+//            else if(states.length==2){
+//                startp.moveUser(pane1, result.userid, left, success, label);
+//                startp.setDash(connNum, 0);
+//            }
+//        }
     }
 
     function start(){
