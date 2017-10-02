@@ -148,7 +148,6 @@ function startPool(container){
     this.refreshUserMetrics = function(data) {
         if(data.purConnNum !== undefined && data.custConnNum !== undefined) this.setDash(parseInt(data.purConnNum), parseInt(data.custConnNum));
         if(data.qrPS !== undefined && data.queryNum !== undefined) this.setMetric(parseInt(data.qrPS), parseInt(data.queryNum));
-        if(parseInt(data.qrPS)>this.historyMax) this.historyMax = parseInt(data.qrPS);
         if(data.outputArray){
             for(var key in data.outputArray){
                 this.refreshBar(key, data.outputArray[key]);
@@ -161,13 +160,17 @@ function startPool(container){
         for(var i = 0; i < data.length; i++){
             total+=data[i];
         }
+        if(total>this.historyMax) this.historyMax = total;
         for(var i = 0; i < data.length; i++){
             var ele = data[i];
             var len = (ele*100)/this.historyMax;
-            if(total>0 && len > (ele*100)/total) len = (ele*100)/total;
             var key = '#' + id + i + 'Bar';
             $(key).css("width", len);
             $(key).html(ele==0?"":ele);
+            if(ele>0){
+                var minWid = (ele+"").length *14 + "px";
+                $(key).css("min-width", minWid);
+            }
         }
         document.getElementById(id+"TotalNum").innerHTML = total;
     }
