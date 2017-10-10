@@ -15,7 +15,7 @@ Installing up the app
 
 1.  Clone the app to your local environment from your terminal using the following command:
 
-    git clone https://github.com:LarryKX/db2nodejs.git
+    git clone https://github.com/DB2-Samples/db2nodejs.git
 
 2.  `cd` into this newly created directory
 3.  Install the required npm and bower packages using the following command
